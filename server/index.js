@@ -1,7 +1,12 @@
 import express from 'express';
+import dotenv from 'dotenv';
+import connectDB from './config/db.js';
+
+dotenv.config();
+connectDB();
 
 const app = express();
-const PORT = 5005;
+const PORT = process.env.PORT;
 
 app.get('/', (req, res) => {
   res.send('Vastralaya Server is Running with ES Modules!');
