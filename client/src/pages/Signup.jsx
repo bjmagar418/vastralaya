@@ -1,13 +1,48 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
 
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleSignup = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      setError("");
+
+      // ✅ FIXED API ENDPOINT
+      await axios.post("http://localhost:5005/api/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      // success → go login
+      navigate("/login");
+
+    } catch (err) {
+      setError(err.response?.data?.message || "Signup failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md">
-        
+
         <div className="mb-10">
           <h1 className="text-3xl font-semibold text-zinc-900">
             Create account
@@ -18,69 +53,74 @@ export default function Signup() {
           </p>
         </div>
 
-        <form className="space-y-5">
-          
-          <div>
-            <label className="block text-sm text-zinc-700 mb-2">
-              Full Name
-            </label>
+        {error && (
+          <div className="mb-4 text-red-500 text-sm">
+            {error}
+          </div>
+        )}
 
+        <form onSubmit={handleSignup} className="space-y-5">
+
+          {/* NAME */}
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Full Name"
+            className="w-full border px-4 py-3 rounded-lg"
+            required
+          />
+
+          {/* EMAIL */}
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Email"
+            className="w-full border px-4 py-3 rounded-lg"
+            required
+          />
+
+          {/* PASSWORD */}
+          <div className="relative">
             <input
-              type="text"
-              placeholder="John Doe"
-              className="w-full border border-zinc-300 rounded-lg px-4 py-3 outline-none focus:border-zinc-900 transition"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="w-full border px-4 py-3 pr-12 rounded-lg"
+              required
             />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2"
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </div>
 
-          <div>
-            <label className="block text-sm text-zinc-700 mb-2">
-              Email
-            </label>
-
-            <input
-              type="email"
-              placeholder="you@example.com"
-              className="w-full border border-zinc-300 rounded-lg px-4 py-3 outline-none focus:border-zinc-900 transition"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm text-zinc-700 mb-2">
-              Password
-            </label>
-
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Create a password"
-                className="w-full border border-zinc-300 rounded-lg px-4 py-3 pr-12 outline-none focus:border-zinc-900 transition"
-              />
-
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500"
-              >
-                {showPassword ? (
-                  <EyeOff size={18} />
-                ) : (
-                  <Eye size={18} />
-                )}
-              </button>
-            </div>
-          </div>
-
-          <button className="w-full bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-lg transition">
-            Create Account
+          {/* BUTTON */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-black text-white py-3 rounded-lg"
+          >
+            {loading ? "Creating..." : "Create Account"}
           </button>
         </form>
 
-        <p className="text-sm text-zinc-500 text-center mt-8">
-          Already have an account?{" "}
-          <span className="text-zinc-900 cursor-pointer">
+        <p className="text-center mt-6 text-sm">
+          Already have account?{" "}
+          <span
+            onClick={() => navigate("/login")}
+            className="cursor-pointer underline"
+          >
             Login
           </span>
         </p>
+
       </div>
     </div>
   );

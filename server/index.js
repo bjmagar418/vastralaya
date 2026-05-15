@@ -1,17 +1,34 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import connectDB from './config/db.js';
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+
+import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+import seedUsers from "./seed/seedUsers.js";
 
 dotenv.config();
+
 connectDB();
 
 const app = express();
-const PORT = process.env.PORT;
 
-app.get('/', (req, res) => {
-  res.send('Vastralaya Server is Running with ES Modules!');
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Routes
+app.use("/api/auth", authRoutes);
+
+// Run seed ONLY ONCE safely
+seedUsers();
+
+// Test Route
+app.get("/", (req, res) => {
+  res.send("Vastralaya Server is Running!");
 });
 
+const PORT = process.env.PORT || 5005;
+
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
