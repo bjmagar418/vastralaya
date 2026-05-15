@@ -472,7 +472,11 @@ font-weight: bold;
     padding: 0.5rem 2rem 0 6rem;
 }
 .subscribe{
-      padding: 1.5rem 2rem 0 6rem;
+      padding: 1.5rem 2rem 2rem 6rem;
+}
+.footer_container{
+      padding: 3.5rem 2rem 0 6rem;
+
 }
 
 .brand_card img{
@@ -532,8 +536,11 @@ font-weight: bold;
 .footer__container {
   max-width: var(--max-width-1200);
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(7, 1fr);
   gap: 2rem;
+    padding: 1rem 3rem 0 6rem;
+    background-color: black;
+
 }
 
 .footer__container h4 {
@@ -541,44 +548,16 @@ font-weight: bold;
   font-size: 1.2rem;
   font-weight: 800;
   font-family: var(--header-font);
-  color: var(--text-dark);
+  color: white;
 }
 
-.footer__col p {
-  margin-bottom: 1rem;
-  font-weight: 500;
-  color: var(--text-light);
-}
 
-.footer__col p span {
-  margin-right: 0.5rem;
-  font-size: 1.2rem;
+
+.footer__col Link:hover {
   color: var(--primary-color);
 }
-
-.footer__col a {
-  display: block;
-  margin-bottom: 1rem;
-  font-weight: 500;
-  color: var(--text-light);
-}
-
-.footer__col a:hover {
-  color: var(--primary-color);
-}
-
-.instagram__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-}
-
-.footer__bar {
-  padding: 1rem;
-  text-align: center;
-  font-size: 0.8rem;
-  color: var(--text-light);
-  border-top: 2px solid var(--extra-light);
+.footer_copyright{
+padding: 1rem;
 }
 
 @media (width < 900px) {
@@ -640,6 +619,10 @@ font-weight: bold;
   }
 }
 
+
+.footer {
+  margin-top: 10px;
+}
 @media (width < 600px) {
   .categories__grid {
     grid-template-columns: repeat(2, 1fr);

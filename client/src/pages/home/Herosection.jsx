@@ -16,9 +16,6 @@ const Herosection = () => {
   <div className="col-span-7 col-start-1"><Blogs/></div>
     <div className="col-span-7 col-start-1"><FeaturesBrand/></div>
   <div className="col-span-7 col-start-1"><Promotional/></div>
-    <div className="col-span-7 col-start-1  bg-amber-500">07</div>
-
-
 </div>
   )
 }
