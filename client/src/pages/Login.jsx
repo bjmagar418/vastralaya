@@ -20,13 +20,17 @@ export default function Login() {
       setLoading(true);
       setError("");
 
-      const res = await axios.post("http://localhost:5005/api/auth/login", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        "http://localhost:5005/api/auth/login",
+        { email, password }
+      );
 
-      // ✅ FIXED: backend sends user directly (NOT res.data.user)
       const user = res.data;
+
+      // ✅ safety check
+      if (!user || !user.token) {
+        throw new Error("Invalid response from server");
+      }
 
       // store auth data
       localStorage.setItem("token", user.token);
@@ -39,8 +43,13 @@ export default function Login() {
       } else {
         navigate("/user/dashboard");
       }
+
     } catch (error) {
-      setError(error.response?.data?.message || "Login failed");
+      setError(
+        error.response?.data?.message ||
+        error.message ||
+        "Login failed"
+      );
     } finally {
       setLoading(false);
     }
@@ -81,7 +90,7 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="john@gmail.com"
-              className="w-full border border-zinc-300 rounded-lg px-4 py-3 outline-none focus:border-zinc-900 transition"
+              className="w-full border border-zinc-300 rounded-lg px-4 py-3 outline-none focus:border-zinc-900"
               required
             />
           </div>
@@ -98,7 +107,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
-                className="w-full border border-zinc-300 rounded-lg px-4 py-3 pr-12 outline-none focus:border-zinc-900 transition"
+                className="w-full border border-zinc-300 rounded-lg px-4 py-3 pr-12 outline-none focus:border-zinc-900"
                 required
               />
 
@@ -112,23 +121,11 @@ export default function Login() {
             </div>
           </div>
 
-          {/* OPTIONS */}
-          <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2 text-zinc-600">
-              <input type="checkbox" />
-              Remember me
-            </label>
-
-            <a href="#" className="text-zinc-900">
-              Forgot password?
-            </a>
-          </div>
-
           {/* BUTTON */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-lg transition"
+            className="w-full bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-lg"
           >
             {loading ? "Logging in..." : "Sign in"}
           </button>
