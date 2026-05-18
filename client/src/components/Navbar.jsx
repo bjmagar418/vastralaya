@@ -44,7 +44,7 @@ const Navbar = () => {
           {/* NAV LINKS (CENTER - STRETCH FIX) */}
           <ul className="flex flex-1 flex-wrap justify-center items-center gap-6 text-base font-medium">
             <li><Link to="/" className="link">Home</Link></li>
-            <li><Link to="/shop" className="link">Shop</Link></li>
+            <li><Link to="shop" className="link">Shop</Link></li>
             <li><Link to="/pages" className="link">Category</Link></li>
 
             {/* stretched items */}
@@ -110,3 +110,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

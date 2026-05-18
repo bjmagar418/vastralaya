@@ -13,6 +13,7 @@ import App from "./App";
 
 import Home from "./pages/home/Home";
 import Login from "./pages/Login";
+import Products from "./pages/Products";
 import Signup from "./pages/Signup";
 
 import UserDashboard from "./pages/user/UserDashboard";
@@ -28,52 +29,64 @@ ReactDOM.createRoot(root).render(
 
   // <Provider store={store}>
 
-    <BrowserRouter>
+  <BrowserRouter>
 
-      <Routes>
+    <Routes>
 
-        {/* MAIN LAYOUT */}
+      {/* MAIN LAYOUT */}
 
-        <Route path="/" element={<App />}>
+      <Route path="/" element={<App />}>
 
-          <Route index element={<Home />} />
-
-          <Route
-            path="about"
-            element={<div>About</div>}
-          />
-
-        </Route>
-
-        {/* AUTH */}
+        <Route index element={<Home />} />
 
         <Route
-          path="/login"
-          element={<Login />}
+          path="about"
+          element={<div>About</div>}
         />
+        
+        {/* product card */}
+      
+      <Route
+        path="shop"
+        element={<Products />}
+      />
 
-        <Route
-          path="/signup"
-          element={<Signup />}
-        />
+      </Route>
 
-        {/* USER */}
+      {/* AUTH */}
 
-        <Route
-          path="/user/dashboard"
-          element={<UserDashboard />}
-        />
+      <Route
+        path="/login"
+        element={<Login />}
+      />
 
-        {/* ADMIN */}
+      <Route
+        path="/signup"
+        element={<Signup />}
+      />
 
-        <Route
-          path="/admin/dashboard"
-          element={<AdminDashboard />}
-        />
+      {/* USER */}
 
-      </Routes>
+      <Route
+        path="/user/dashboard"
+        element={<UserDashboard />}
+      />
 
-    </BrowserRouter>
+      {/* ADMIN */}
+
+      <Route
+        path="/admin/dashboard"
+        element={<AdminDashboard />}
+      />
+
+      
+
+    </Routes>
+
+  </BrowserRouter>
 
   // </Provider>
 );
+
+
+
