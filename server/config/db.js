@@ -1,12 +1,18 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+// Load environment variables immediately
+dotenv.config();
 
 const connectDB = async () => {
   try {
+    // Force Mongoose to check the Atlas string from your .env
     const conn = await mongoose.connect(process.env.MONGO_URI);
-    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+    console.log(`📡 MongoDB Connected Successfully: ${conn.connection.host}`);
   } catch (error) {
-    console.error(`❌ Error: ${error.message}`);
-    process.env.exit(1); // Stop the server if the database fails
+    console.error(`❌ Database Connection Error: ${error.message}`);
+    // Fixed typo: removed '.env' so it exits cleanly without a TypeError
+    process.exit(1); 
   }
 };
 
