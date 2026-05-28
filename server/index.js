@@ -4,6 +4,7 @@ import cors from "cors";
 
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import productsRoutes from "./routes/productsRoutes.js";
 import seedUsers from "./seed/seedUsers.js";
 
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(express.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productsRoutes);
 
 // Run seed ONLY ONCE safely
 seedUsers();
