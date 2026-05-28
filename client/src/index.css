@@ -1,26 +1,24 @@
+/* index.css */
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Poppins:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
-@theme{
-    --color-primary:#ed3849;
-        --color-primary-dark:#d23141;
-    --color-primary-light:#f4e5ec;
-    --color-text-dark:#0f172a;
-    --color-text-light:#64748b;
-    --color-extra-light:#f8fafc;
-    --max-width-screen2xl: 1400px;
-    --max-width-custom1200: 1200px;
-    --max-width-custom900: 900px;
 
-}
-/*helps you add custom css in tailwind*/
-@layer components{
-
-.add-product-InputCSS {
-  @apply mt-1 block py-2.5 px-4 w-full rounded-md bg-gray-100 border-gray-300 shadow-sm focus:outline-none focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm
+@theme {
+  --color-primary: #f2e8e0;
+  --color-primary-dark: #d23141;
+  --color-primary-light: #f4e5ec;
+  --color-text-dark: #0f172a;
+  --color-text-light: #64748b;
+  --color-extra-light: #f8fafc;
 }
 
-.add-product-btn{
-  @apply mt-5 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500
+/* ✅ REPLACE your old * { padding:0; margin:0 } with this */
+*, *::before, *::after {
+  box-sizing: border-box;
+  /* NO padding:0 or margin:0 here */
 }
 
-
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;  /* only margin:0 on body is fine */
 }

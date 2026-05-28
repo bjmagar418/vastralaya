@@ -1,106 +1,203 @@
-import React from "react";
-import { Link } from "react-router";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import logo from "../assets/logo.jpeg";
+import { useNavigate } from "react-router-dom";
+import CartModel from "../pages/Shop/productDetails/CartModel";
+import WishModel from "../pages/Shop/productDetails/WishModel";
+import { useCart } from "../pages/Shop/productDetails/CartContext";
+import { useWish } from "../pages/Shop/productDetails/WishContext";
 
 const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isCartOpen, setisCartOpen] = useState(false);
+  const [isWishOpen, setisWishOpen] = useState(false);
+  const [navSearchQuery, setNavSearchQuery] = useState("");
+
+  const { totalItems } = useCart();
+
+  const { totalItems: totalWishItems } = useWish();
+
+  const navigate = useNavigate();
+
+  const handleWishToggle = () => setisWishOpen(!isWishOpen);
+  const handleCartToggle = () => setisCartOpen(!isCartOpen);
+
+  const handleNavSearch = () => {
+    if (navSearchQuery.trim()) {
+      navigate(`/search?query=${encodeURIComponent(navSearchQuery.trim())}`);
+    } else {
+      navigate("/search");
+    }
+  };
+
   return (
     <>
-      <header>
-        {/*upper*/}
-        <div className=" flex justify-between  bg-primary text-sm font-light">
-          <div className="flex justify-evenly items-center">
-            <div className="flex gap-2">
-              <i className="ri-caravan-line"></i>
-              <span>Free Shipping on Orders Above NPR 1999</span>
-            </div>
-            <div className="flex gap-2">
-              <i className="ri-exchange-dollar-line"></i>
-              <span>Easy Returns</span>
-            </div>
-            <div className="flex gap-2">
-              <i className="ri-git-repository-private-line"></i>
-              <span>Secure Payments</span>
-            </div>
+      <nav className="px-4 py-2">
+        {/* TOP ROW: Logo + Icons + Hamburger */}
+        <div className="flex items-center justify-between">
+          {/* LOGO */}
+          <div className="flex items-center gap-2">
+            <img
+              src={logo}
+              alt="logo"
+              className="h-[48px] w-auto object-contain"
+            />
+            <Link
+              to="/"
+              className="flex flex-col leading-none font-bold text-2xl"
+            >
+              VASTRALAYA
+              <span className="text-sm font-normal self-center">
+                Redefine your style
+              </span>
+            </Link>
           </div>
-          <div className="flex gap-3">
-            <i className="ri-discount-percent-line"></i>{" "}
-            <span>Get 100% discount first order</span>
+
+          {/* NAV LINKS */}
+          <ul className="hidden lg:flex flex-1 flex-wrap justify-center items-center gap-6 text-base font-medium">
+            {[
+              { to: "/", label: "Home" },
+              { to: "/shop", label: "Shop" },
+              { to: "/category", label: "Category" },
+              { to: "/about", label: "About us" },
+              { to: "/contact", label: "Contact" },
+            ].map(({ to, label }) => (
+              <li key={to}>
+                <Link
+                  to={to}
+                  className="hover:text-red-500 text-xl font-semibold"
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          {/* ICONS + BUTTONS */}
+          <div className="flex items-center gap-4">
+            {/* Search */}
+            <div className="hidden lg:flex items-center border border-gray-300 rounded-md px-3 py-1">
+              <input
+                type="text"
+                placeholder="Search products"
+                value={navSearchQuery}
+                onChange={(e) => setNavSearchQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleNavSearch()}
+                className="text-sm bg-transparent focus:outline-none w-32"
+              />
+              <i
+                className="ri-search-line cursor-pointer"
+                onClick={handleNavSearch}
+              ></i>
+            </div>
+
+            {/* Wishlist */}
+            {/* Wishlist */}
+            <button
+              onClick={handleWishToggle}
+              className="relative cursor-pointer"
+            >
+              <i className="ri-heart-line hover:text-red-500 text-xl active:text-red-500"></i>
+              {totalWishItems > 0 && (
+                <sup className="absolute -top-2 -right-2 text-xs w-4 h-4 flex items-center justify-center bg-red-500 text-white rounded-full">
+                  {totalWishItems}
+                </sup>
+              )}
+            </button>
+
+            {/* Cart — badge now shows real count from useCart */}
+            <button
+              onClick={handleCartToggle}
+              className="relative cursor-pointer"
+            >
+              <i className="ri-shopping-cart-line hover:text-red-500 text-xl active:text-red-500"></i>
+              {totalItems > 0 && (
+                <sup className="absolute -top-2 -right-2 text-xs w-4 h-4 flex items-center justify-center bg-red-500 text-white rounded-full">
+                  {totalItems}
+                </sup>
+              )}
+            </button>
+
+            {/* Log In / Sign Up */}
+            <div className="hidden lg:flex items-center gap-3">
+              <Link
+                to="/login"
+                className="px-4 py-1 text-base font-medium text-gray-700 border border-gray-400 rounded hover:bg-red-500 hover:text-white hover:border-transparent transition-all duration-300"
+              >
+                Log In
+              </Link>
+              <Link
+                to="/signup"
+                className="px-4 py-1 text-base font-medium text-gray-700 border border-gray-400 rounded hover:bg-red-500 hover:text-white hover:border-transparent transition-all duration-300"
+              >
+                Sign Up
+              </Link>
+            </div>
+
+            {/* Hamburger */}
+            <button
+              className="lg:hidden text-2xl cursor-pointer active:text-red-500"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              <i className={menuOpen ? "ri-close-line" : "ri-menu-line"}></i>
+            </button>
           </div>
         </div>
-       
-       <nav className="flex items-center justify-between px-4 py-2">
 
-  {/* LOGO */}
-  <div className="flex items-center gap-2">
-    <img src={logo} alt="logo" className="h-[48px] w-auto object-contain" />
-    <Link to="/" className="flex flex-col leading-none font-bold text-2xl">
-      VASTRALAYA
-      <span className="text-sm font-normal self-center">
-        Redefine your style
-      </span>
-    </Link>
-  </div>
+        {/* MOBILE MENU */}
+        {menuOpen && (
+          <div className="lg:hidden mt-3 flex flex-col gap-4 border-t pt-4 pb-2">
+            <div className="flex items-center border border-gray-300 rounded-md px-3 py-1">
+              <input
+                type="text"
+                placeholder="Search products"
+                className="text-sm bg-transparent focus:outline-none flex-1"
+              />
+              <Link to="/search" onClick={() => setMenuOpen(false)}>
+                <i className="ri-search-line cursor-pointer"></i>
+              </Link>
+            </div>
+            <ul className="flex flex-col gap-3 text-base font-semibold">
+              {[
+                { to: "/", label: "Home" },
+                { to: "/shop", label: "Shop" },
+                { to: "/category", label: "Category" },
+                { to: "/about", label: "About Us" },
+                { to: "/contact", label: "Contact" },
+              ].map(({ to, label }) => (
+                <li key={to}>
+                  <Link
+                    to={to}
+                    className="block hover:text-red-500 transition active:text-red-500"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <div className="flex gap-3 mt-1">
+              <Link
+                to="/login"
+                onClick={() => setMenuOpen(false)}
+                className="flex-1 text-center px-4 py-2 text-base font-medium text-gray-700 border border-gray-400 rounded hover:bg-red-500 hover:text-white hover:border-transparent transition-all duration-300"
+              >
+                Log In
+              </Link>
+              <Link
+                to="/signup"
+                onClick={() => setMenuOpen(false)}
+                className="flex-1 text-center px-4 py-2 text-base font-medium text-gray-700 border border-gray-400 rounded hover:bg-red-500 hover:text-white hover:border-transparent transition-all duration-300"
+              >
+                Sign Up
+              </Link>
+            </div>
+          </div>
+        )}
+      </nav>
 
-  {/* NAV LINKS (CENTER - STRETCH FIX) */}
-  <ul className="flex flex-1 flex-wrap justify-center items-center gap-6 text-base font-medium">
-    <li><Link to="/" className="link">Home</Link></li>
-    <li><Link to="/shop"  className="link">Shop</Link></li>
-    <li><Link to="/pages"  className="link">Category</Link></li>
-
-    {/* stretched items */}
-    <li className=" text-center">
-      <Link to="/pages"  className="link">New Arrivals</Link>
-    </li>
-
-    <li><Link to="/pages"  className="link">Offer</Link></li>
-
-    <li className=" text-center">
-      <Link to="/pages"  className="link">About us</Link>
-    </li>
-
-    <li><Link to="/pages"  className="link">Contact</Link></li>
-  </ul>
-
-  {/* ICONS */}
-  <div className="flex items-center gap-4">
-
-    {/* search */}
-    <div className="flex items-center border border-gray-300 rounded-md px-3 py-1">
-      <input
-        type="text"
-        placeholder="Search products"
-        className="text-sm bg-transparent focus:outline-none w-32"
-      />
-      <Link to="/search">
-        <i className="ri-search-line cursor-pointer"></i>
-      </Link>
-    </div>
-
-    {/* wishlist */}
-    <button className="relative link cursor-pointer">
-      <i className="ri-heart-line"></i>
-      <sup className="absolute -top-2 -right-2 text-xs w-4 h-4 flex items-center justify-center text-black rounded-full">
-        0
-      </sup>
-    </button>
-
-    {/* cart */}
-    <button className="relative link cursor-pointer">
-      <i className="ri-restaurant-line"></i>
-      <sup className="absolute -top-2 -right-2 text-xs w-4 h-4 flex items-center justify-center text-black rounded-full">
-        0
-      </sup>
-    </button>
-
-    {/* login */}
-    <Link to="/login" className="link text-sm font-medium">
-      <i className="ri-user-line"></i> Login/Register
-    </Link>
-  </div>
-
-</nav>
-      </header>
-    </>
+      {isCartOpen && <CartModel onClose={handleCartToggle} />}
+{isWishOpen && <WishModel onClose={handleWishToggle} />}    </>
   );
 };
 
