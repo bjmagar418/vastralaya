@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
+import {Link} from "react-router-dom";
 
 const SingleProduct = () => {
   const { id } = useParams();
@@ -69,8 +70,27 @@ const SingleProduct = () => {
   return (
     <div className="max-w-6xl mx-auto p-8">
 
+      <div className="bg-primary min-h-[200px] md:min-h-[280px] lg:min-h-[320px] flex flex-col items-center justify-center py-10 md:py-16 lg:py-20">
+  <h2 className="mb-4 text-xl md:text-3xl lg:text-4xl font-extrabold font-serif text-gray-900 text-center px-4">
+    Single Product Page
+  </h2>
+  <div className="flex items-center gap-1 text-black text-center text-sm md:text-base flex-wrap justify-center px-4 space-x-2">
+    <span className="hover:text-red-500">
+      <Link to='/'>Home</Link>
+      <i className="ri-arrow-right-s-line"></i>
+    </span>
+    <span className="hover:text-red-500">
+      <Link to='/shop'>Shop</Link>
+      <i className="ri-arrow-right-s-line"></i>
+    </span>
+    <span className="hover:text-red-500 font-medium cursor-pointer">
+      {product.name}
+    </span>
+  </div>
+</div>
+
       {/* PRODUCT SECTION */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 py-9" >
 
         {/* IMAGE */}
         <div>

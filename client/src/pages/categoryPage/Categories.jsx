@@ -31,15 +31,4 @@ const Categories = () => {
 }
 
 export default Categories;
-// import React from 'react'
-
-// const Categories = () => {
-//   return (
-//     <div>
-//       hello fdkdkdk
-//     </div>
-//   )
-// }
-
-// export default Categories
 

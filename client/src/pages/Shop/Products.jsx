@@ -1,21 +1,16 @@
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ProductSkeleton from "../../components/ProductSkeleton";
 import { FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useCart } from "../Shop/productDetails/CartContext";
-import { useWish } from "../Shop/productDetails/WishContext";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, removeFromCart } from "../../redux/features/cart/cartSlice";
+import { addToWish,removeFromWish } from "../../redux/features/wish/wishSlice";
 
 const colorOptions = [
-  "Black",
-  "White",
-  "Red",
-  "Blue",
-  "Green",
-  "Yellow",
-  "Gray",
-  "Brown",
+  "Black", "White", "Red", "Blue", "Green", "Yellow", "Gray", "Brown",
 ];
 
 const priceOptions = [
@@ -34,12 +29,31 @@ const Products = () => {
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedPrice, setSelectedPrice] = useState(priceOptions[0]);
 
-  const { addToWish, removeFromWish, wish } = useWish();
-  const isInWish = (id) => wish.some((item) => item._id === id);
 
-  const { addToCart,removeFromCart, cart } = useCart();
 
-  const isInCart = (id) => cart.some((item) => item._id === id);
+  // Redux for cart
+  const dispatch = useDispatch();
+  const cartProducts = useSelector((state) => state.cart.products);
+  const isInCart = (id) => cartProducts.some((item) => item._id === id);
+
+    const wishProducts = useSelector((state) => state.wish.products);
+  const isInWish = (id) => wishProducts.some((item) => item._id === id);
+
+ const handleAddToCart = (product, e) => {
+  e.preventDefault();
+  isInCart(product._id)
+    ? dispatch(removeFromCart({ id: product._id }))
+    : dispatch(addToCart(product));
+};
+
+const handleAddToWish = (product, e) =>{
+  e.preventDefault();
+  isInWish(product._id)
+    ? dispatch( removeFromWish({ id: product._id }))
+    : dispatch( addToWish(product));
+}
+  
+
 
   useEffect(() => {
     fetchProducts();
@@ -61,7 +75,7 @@ const Products = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5005/api/products/categories",
+        "http://localhost:5005/api/products/categories"
       );
       setCategories(response.data.categories);
     } catch (error) {
@@ -102,7 +116,10 @@ const Products = () => {
               <input
                 type="radio"
                 name="category"
-                value={cat.name}
+                val
+                
+                
+                ue={cat.name}
                 checked={selectedCategory === cat.name}
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="mr-2"
@@ -174,15 +191,10 @@ const Products = () => {
                   key={product._id}
                   className="p-4 shadow-xl relative hover:shadow-lg transition"
                 >
-                  {/* CART BUTTON — clicking adds to cart, turns green when already added */}
+                  {/* CART BUTTON */}
                   <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                       isInCart(product._id)
-                        ? removeFromCart(product._id)
-                        : addToCart(product);
-                    }}
-                    className={`absolute top-3 right-3 p-2 rounded-full transition z-10 ${
+                   onClick={(e) => handleAddToCart(product, e)}
+                    className={`cursor-pointer absolute top-3 right-3 p-2 rounded-full transition z-10 ${
                       isInCart(product._id)
                         ? "text-green-500"
                         : "text-black hover:text-red-500"
@@ -191,20 +203,13 @@ const Products = () => {
                       isInCart(product._id) ? "Added to cart" : "Add to cart"
                     }
                   >
-                    <FaShoppingCart size={18} />
+                    <FaShoppingCart size={18}  className="cursor-pointer"/>
                   </button>
 
-                  {/*wish list */}
-
-                  {/* WISHLIST BUTTON — top left */}
+                  {/* WISHLIST BUTTON */}
                   <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      isInWish(product._id)
-                        ? removeFromWish(product._id)
-                        : addToWish(product);
-                    }}
-                    className={`absolute top-3 left-3 p-2 rounded-full transition z-10 ${
+                   onClick={(e) => handleAddToWish(product, e)}
+                    className={`cursor-pointer absolute top-3 left-3 p-2 rounded-full transition z-10 ${
                       isInWish(product._id)
                         ? "text-red-500"
                         : "text-black hover:text-red-500"
@@ -216,11 +221,12 @@ const Products = () => {
                     }
                   >
                     {isInWish(product._id) ? (
-                      <FaHeart size={18} />
+                      <FaHeart size={18} className="cursor-pointer" />
                     ) : (
-                      <FaRegHeart size={18} />
+                      <FaRegHeart size={18} className="cursor-pointer" />
                     )}
                   </button>
+
                   {/* PRODUCT LINK */}
                   <Link to={`/products/${product._id}`}>
                     <img

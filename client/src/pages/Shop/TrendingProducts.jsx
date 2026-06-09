@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-// import products from '../../data/product.json';
 import { Link } from "react-router";
 
 import axios from "axios";
 import { FaShoppingCart } from "react-icons/fa";
 import ProductSkeleton from "../../components/ProductSkeleton";
+import { useDispatch, useSelector } from "react-redux";
 
-import { useCart } from "../Shop/productDetails/CartContext";
-import { useWish } from "../Shop/productDetails/WishContext";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { addToCart, removeFromCart } from "../../redux/features/cart/cartSlice";
+import { addToWish,removeFromWish } from "../../redux/features/wish/wishSlice";
+
 
 
 
@@ -24,12 +25,31 @@ const TrendingProducts = () => {
     setVisibleProducts((prevCount) => prevCount + 4);
   };
 
-    const { addToWish, removeFromWish, wish } = useWish();
-    const isInWish = (id) => wish.some((item) => item._id === id);
 
-    const { addToCart, removeFromCart,cart } = useCart();
+
+      const dispatch = useDispatch();
+    const cartProducts = useSelector((state) => state.cart.products);
+  const isInCart = (id) => cartProducts.some((item) => item._id === id);
+
+  const wishProducts = useSelector((state) => state.wish.products);
+      const isInWish = (id) => wishProducts.some((item) => item._id === id);
+
   
-    const isInCart = (id) => cart.some((item) => item._id === id);
+  const handleAddToCart = (product, e) => {
+   e.preventDefault();
+   isInCart(product._id)
+     ? dispatch(removeFromCart({ id: product._id }))
+     : dispatch(addToCart(product));
+ };
+
+const handleAddToWish = (product, e) =>{
+  e.preventDefault();
+  isInWish(product._id)
+    ? dispatch( removeFromWish({ id: product._id }))
+    : dispatch( addToWish(product));
+}
+  
+
 
   useEffect(() => {
   const fetchProducts = async () => {
@@ -70,50 +90,42 @@ return (
               className="bg-white border rounded-lg p-2 shadow-sm relative w-full "
             >
                 {/* CART BUTTON — clicking adds to cart, turns green when already added */}
-                                     <button
-                                                   onClick={(e) => {
-                                                     e.preventDefault();
-                                                      isInCart(product._id)
-                                                       ? removeFromCart(product._id)
-                                                       : addToCart(product);
-                                                   }}
-                                                   className={`absolute top-3 right-3 p-2 rounded-full transition z-10 ${
-                                                     isInCart(product._id)
-                                                       ? "text-green-500"
-                                                       : "text-black hover:text-red-500"
-                                                   }`}
-                                                   title={
-                                                     isInCart(product._id) ? "Added to cart" : "Add to cart"
-                                                   }
-                                                 >
-                                                   <FaShoppingCart size={18} />
-                                                 </button>
+                                       {/* CART BUTTON */}
+                                                     <button
+                                                      onClick={(e) => handleAddToCart(product, e)}
+                                                       className={`absolute top-3 right-3 p-2 rounded-full transition z-10 ${
+                                                         isInCart(product._id)
+                                                           ? "text-green-500"
+                                                           : "text-black hover:text-red-500"
+                                                       }`}
+                                                       title={
+                                                         isInCart(product._id) ? "Added to cart" : "Add to cart"
+                                                       }
+                                                     >
+                                                       <FaShoppingCart size={18} className="cursor-pointer" />
+                                                     </button>
 
                                     {/* WISHLIST BUTTON — top left */}
-                                                  <button
-                                                    onClick={(e) => {
-                                                      e.preventDefault();
-                                                      isInWish(product._id)
-                                                        ? removeFromWish(product._id)
-                                                        : addToWish(product);
-                                                    }}
-                                                    className={`absolute top-3 left-3 p-2 rounded-full transition z-10 ${
-                                                      isInWish(product._id)
-                                                        ? "text-red-500"
-                                                        : "text-black hover:text-red-500"
-                                                    }`}
-                                                    title={
-                                                      isInWish(product._id)
-                                                        ? "Remove from wishlist"
-                                                        : "Add to wishlist"
-                                                    }
-                                                  >
-                                                    {isInWish(product._id) ? (
-                                                      <FaHeart size={18} />
-                                                    ) : (
-                                                      <FaRegHeart size={18} />
-                                                    )}
-                                                  </button>
+                                                  {/* WISHLIST BUTTON */}
+                                                                  <button
+                                                                   onClick={(e) => handleAddToWish(product, e)}
+                                                                    className={`cursor-pointer absolute top-3 left-3 p-2 rounded-full transition z-10 ${
+                                                                      isInWish(product._id)
+                                                                        ? "text-red-500"
+                                                                        : "text-black hover:text-red-500"
+                                                                    }`}
+                                                                    title={
+                                                                      isInWish(product._id)
+                                                                        ? "Remove from wishlist"
+                                                                        : "Add to wishlist"
+                                                                    }
+                                                                  >
+                                                                    {isInWish(product._id) ? (
+                                                                      <FaHeart size={18} className="cursor-pointer" />
+                                                                    ) : (
+                                                                      <FaRegHeart size={18} className="cursor-pointer" />
+                                                                    )}
+                                                                  </button>
               <img
                 src={product.imageUrl}
                 alt={product.name}

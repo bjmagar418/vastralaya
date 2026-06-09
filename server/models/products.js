@@ -4,19 +4,33 @@ const productSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Product name is required."],
       trim: true,
+      minLength: [3, "Product name must be at least 3 characters."],
+      maxLength: [100, "Product name must be less than 100 characters."],
     },
-
+    brand: {
+      type: String,
+    },
     price: {
       type: Number,
-      required: true,
-      min: 0,
+      required: [true, "Product price is required."],
+      min: [1, "Price must be at least 1."],
+      max: [100000, "Price must be less than 100000."],
     },
-
+    description:{
+      type:String
+    },
+    color:{
+      type:String
+    },
+    rating:{
+      type:Number,
+      default:0
+    },
     category: {
       type: String,
-      required: true,
+      required: [true, "Product category is required."],
       trim: true,
     },
 
@@ -24,17 +38,27 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-   
     stock: {
       type: Number,
       required: true,
       min: 0,
       default: 0,
     },
-    role: {
-      type: String,
-      default: "admin",
+    createdAt: {
+      type: Date,
+      default: Date.now,
     },
+    createdBy: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: [true, "Created by user id is required"],
+    },
+    // author:{
+    //   types:mongoose.Types.ObjectId,
+    //   ref:"User",
+    //   required:true
+    // }
+    
   },
   {
     timestamps: true,

@@ -1,0 +1,86 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  products: [],
+  selectedItems: 0,
+  totalPrice: 0,
+  tax: 0,
+  taxRate: 0.13,
+  DELIVERY_FEE: 129,
+  grandTotal: 0,
+};
+const wishSlice = createSlice({
+    name:'wish',
+    initialState,
+    reducers:{
+        addToWish: (state,action) =>{
+          const isExist = state.products.find(
+            (product) => product._id === action.payload._id,
+          );
+          if (!isExist) {
+            state.products.push({ ...action.payload, quantity: 1 });
+          } else {
+            console.log("Items already added");
+          };
+           state.selectedItems = setSelectedItems(state);
+           state.totalPrice = setTotalPrice(state);
+           state.tax =setTax(state);
+           state.grandTotal = setGrandTotal(state);
+        },
+          removeFromWish:(state,action)=>{
+         state.products = state.products.filter((product)=> product._id !== action.payload.id);
+            state.selectedItems = setSelectedItems(state);
+            state.totalPrice = setTotalPrice(state);
+            state.tax = setTax(state);
+            state.grandTotal = setGrandTotal(state);
+        },
+         updateWishQuantity:(state,action) =>{
+         const products = state.products.map((product) =>{
+          if(product._id === action.payload.id){
+            if(action.payload.type === 'increment'){
+              product.quantity += 1;
+            }else if (action.payload.type === 'decrement'){
+           if(product.quantity > 1){
+            product.quantity -=1
+           }
+            }
+          }
+          return product;
+         });
+         state.selectedItems = setSelectedItems(state);
+          state.totalPrice = setTotalPrice(state);
+         state.tax = setTax(state);
+         state.grandTotal = setGrandTotal(state);
+         },
+        clearWish :(state) =>{
+        state.products =[];
+        state.selectedItems =0;
+        state.totalPrice=0;
+        state.tax=0;
+        state.grandTotal=0
+        },
+    }
+});
+
+//utilities function
+
+export const setSelectedItems = (state) =>
+  state.products.reduce((total, product) => {
+    return Number(total + product.quantity);
+  }, 0);
+
+export const setTotalPrice = (state) =>
+  state.products.reduce((total, product) => {
+    return Number(total + product.quantity * product.price);
+  }, 0);
+
+export const setTax = (state) => setTotalPrice(state) * state.taxRate;
+export const setGrandTotal = (state) => {
+  return setTotalPrice(state) + setTotalPrice(state) * state.taxRate;
+};
+
+
+
+    export const { addToWish, updateWishQuantity, removeFromWish, clearWish } =
+      wishSlice.actions;
+    export default wishSlice.reducer;

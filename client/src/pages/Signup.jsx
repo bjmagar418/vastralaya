@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import {useRegisterUserMutation} from "../redux/features/auth/authApi"
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,29 +12,61 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [phone, setPhone] = useState("+977");
+const [city, setCity] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+ const [message,setMessage] = useState('');
+
+
+
+   
+  const [ registerUser,{isLoading}] = useRegisterUserMutation()
+ const navigate =useNavigate();
+
+ const handlePhoneChange = (e) => {
+  const value = e.target.value;
+  // Prevent removing the +977 prefix
+  if (!value.startsWith("+977")) return;
+  // Limit to +977 + 10 digits = 14 chars total
+  if (value.length > 14) return;
+  setPhone(value);
+};
 
   const handleSignup = async (e) => {
     e.preventDefault();
 
+   const data = {
+  name,
+  email,
+  password,
+  phone,
+  address: {
+    city,
+  },
+};
+
+
+   // console.log(data);
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
     try {
-      setLoading(true);
-      setError("");
-      await axios.post("http://localhost:5005/api/auth/register", {
-        name,
-        email,
-        password,
-      });
+      // setLoading(true);
+      // setError("");
+      // await axios.post("http://localhost:5005/api/auth/register", {
+      //   name,
+      //   email,
+      //   password,
+      // });
+      // navigate("/login");
+      await registerUser(data).unwrap();
+      alert("Registration successful");
       navigate("/login");
-    } catch (err) {
-      setError(err.response?.data?.message || "Signup failed");
+    } catch (error) {
+      setError(error?.data?.message || "Signup failed");
     } finally {
       setLoading(false);
     }
@@ -69,6 +102,25 @@ export default function Signup() {
             className="w-full border px-4 py-3 rounded-lg"
             required
           />
+{/* PHONE */}
+<input
+  type="tel"
+  value={phone}
+  onChange={handlePhoneChange}
+  placeholder="+977XXXXXXXXXX"
+  className="w-full border px-4 py-3 rounded-lg"
+  required
+/>
+
+{/* CITY */}
+<input
+  type="text"
+  value={city}
+  onChange={(e) => setCity(e.target.value)}
+  placeholder="City"
+  className="w-full border px-4 py-3 rounded-lg"
+  required
+/>
 
           {/* PASSWORD */}
           <div className="relative">
@@ -127,7 +179,7 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black text-white py-3 rounded-lg disabled:opacity-60"
+            className="w-full cursor-pointer bg-black text-white py-3 rounded-lg disabled:opacity-60"
           >
             {loading ? "Creating..." : "Create Account"}
           </button>

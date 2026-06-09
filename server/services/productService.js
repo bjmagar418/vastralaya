@@ -1,5 +1,4 @@
 import Product from "../models/products.js";
-
 const getAllProducts = async (limit) => {
   let products = Product.find();
 
@@ -10,13 +9,13 @@ const getAllProducts = async (limit) => {
   return await products;
 };
 
-const createProduct = async (productData) => {
-  const product = new Product(productData);
+const createProduct = async (productData,userId) => {
 
-  return await product.save();
+  return await Product.create({...productData,createdBy:userId});
+// return await Product.create(productData);
 };
 
-const getSingleProduct = async (id) => {
+const getProductById = async (id) => {
   const product = await Product.findById(id);
 
   return product;
@@ -24,7 +23,7 @@ const getSingleProduct = async (id) => {
 
 
 const getAllCategories = async() =>{
-  const categories = Product.aggregate([
+  const categories = await  Product.aggregate([
     {
       $group:{
         _id:"$category",
@@ -50,18 +49,26 @@ const getAllCategories = async() =>{
     return categories;
 };
 
-const getProductsByCategory = async(category)=>{
-return await Product.find({
-category:category.toLowerCase()
-})
+const getProductsByCategory = async (category) => {
+  return await Product.find({
+    category: { $regex: new RegExp(`^${category}$`, "i") },
+  });
+};
+
+const updateProduct = async (id, input) => {
+  return await Product.findByIdAndUpdate(id, input,{new:true});
+};
+
+const deleteProduct = async (id) =>{
+ await Product.findByIdAndDelete(id);
 }
-
-
 
 export default {
   getAllProducts,
   createProduct,
   getAllCategories,
   getProductsByCategory,
-  getSingleProduct
+  getProductById,
+  updateProduct,
+  deleteProduct,
 };

@@ -22,14 +22,14 @@ import ContactPage from "./pages/ContactPage";
 import Search from "./pages/search/Search";
 import SingleProduct from "./pages/Shop/productDetails/SingleProduct";
 
-// import { Provider } from "react-redux";
-// import { store } from "./redux/store.js";
+ import { Provider } from "react-redux";
+import store from "../src/redux/store.js";
 
 const root = document.getElementById("root");
 
 ReactDOM.createRoot(root).render(
   // <Provider store={store}>
-
+ <Provider store ={store}>
   <BrowserRouter>
     <Routes>
       {/* MAIN LAYOUT */}
@@ -79,6 +79,5 @@ ReactDOM.createRoot(root).render(
       <Route path="/admin/dashboard" element={<AdminDashboard />} />
     </Routes>
   </BrowserRouter>,
-
-  // </Provider>
+ </Provider>
 );

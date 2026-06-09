@@ -2,59 +2,48 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { useLoginUserMutation } from "../redux/features/auth/authApi";
+import { setUser } from "../redux/features/auth/authSlice";
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [identifier, setIdentifier] = useState(""); // email or phone
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+ const [message,setMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const dispatch = useDispatch();
+ const [  loginUser,{isLoading:loginLoading}] = useLoginUserMutation();
+ //console.log(loginUser);
 
-    try {
-      setLoading(true);
-      setError("");
+const handleLogin = async (e) => {
+  e.preventDefault();
+  setError("");
 
-      const res = await axios.post(
-        "http://localhost:5005/api/auth/login",
-        { email, password }
-      );
 
-      const user = res.data;
+    // matches +9779812345678 format exactly
+  const isPhone = /^\+?977\d{10}$/.test(identifier) || /^\d{10}$/.test(identifier);
 
-      // ✅ safety check
-      if (!user || !user.token) {
-        throw new Error("Invalid response from server");
-      }
+  const data = isPhone
+    ? { phone: identifier.startsWith("+977") ? identifier : `+977${identifier}`, password }
+    : { email: identifier, password };
 
-      // store auth data
-      localStorage.setItem("token", user.token);
-      localStorage.setItem("role", user.role);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      // 🚀 ROLE BASED REDIRECT
-      if (user.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/user/dashboard");
-      }
-
-    } catch (error) {
-      setError(
-        error.response?.data?.message ||
-        error.message ||
-        "Login failed"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  try {
+    const response = await loginUser(data).unwrap();
+    const { token, ...user } = response;
+    console.log("full response:", response);
+    dispatch(setUser({ user }));
+    navigate("/");
+  } catch (error) {
+    setError(error?.data?.message || "Invalid credentials");
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md">
@@ -79,21 +68,20 @@ export default function Login() {
         {/* FORM */}
         <form className="space-y-5" onSubmit={handleLogin}>
 
-          {/* EMAIL */}
-          <div>
-            <label className="block text-sm text-zinc-700 mb-2">
-              Email
-            </label>
-
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="john@gmail.com"
-              className="w-full border border-zinc-300 rounded-lg px-4 py-3 outline-none focus:border-zinc-900"
-              required
-            />
-          </div>
+       {/* USERNAME */}
+<div>
+  <label className="block text-sm text-zinc-700 mb-2">
+    Username <span className="text-red-500">*</span>
+  </label>
+  <input
+    type="text"
+    value={identifier}
+    onChange={(e) => setIdentifier(e.target.value)}
+    placeholder="Email ID or Mobile Number"
+    className="w-full border border-zinc-300 rounded-lg px-4 py-3 outline-none focus:border-zinc-900"
+    required
+  />
+</div>
 
           {/* PASSWORD */}
           <div>
@@ -125,7 +113,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-lg"
+            className="w-full cursor-pointer bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-lg"
           >
             {loading ? "Logging in..." : "Sign in"}
           </button>
