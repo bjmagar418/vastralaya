@@ -8,6 +8,10 @@ const Home = () => {
     <>
       <Banner />
       <Herosection/>
+<<<<<<< HEAD
+=======
+      <Footer/>
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
     </>
   )
 }

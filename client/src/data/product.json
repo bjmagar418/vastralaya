@@ -2,7 +2,11 @@
     {
       "_id": 1,
       "name": "Leather Handbag",
+<<<<<<< HEAD
       "category": "men",
+=======
+      "category": "accessories",
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
       "description": "Stylish leather handbag with ample storage space.",
       "price": 79.99,
       "oldPrice": 99.99,
@@ -15,7 +19,11 @@
     {
       "_id": 2,
       "name": "Evening Gown",
+<<<<<<< HEAD
       "category": "accessories",
+=======
+      "category": "dress",
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
       "description": "Elegant evening gown for special occasions.",
       "price": 149.99,
       "oldPrice": 199.99,
@@ -26,7 +34,11 @@
     {
       "_id": 3,
       "name": "Gold Necklace",
+<<<<<<< HEAD
       "category": "kids",
+=======
+      "category": "jewellery",
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
       "description": "Exquisite gold necklace with intricate design.",
       "price": 199.99,
       "image": "https://images.unsplash.com/photo-1631097969294-c38afba59496?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -36,7 +48,11 @@
     {
       "_id": 4,
       "name": "Matte Lipstick",
+<<<<<<< HEAD
       "category": "men",
+=======
+      "category": "cosmetics",
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
       "description": "Long-lasting matte lipstick in various shades.",
       "price": 19.99,
       "image": "https://images.unsplash.com/photo-1631214500115-598fc2cb8d2d?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -46,7 +62,11 @@
     {
       "_id": 5,
       "name": "Silk Scarf",
+<<<<<<< HEAD
       "category": "women",
+=======
+      "category": "accessories",
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
       "description": "Luxurious silk scarf with vibrant colors.",
       "price": 29.99,
       "oldPrice": 39.99,
@@ -57,7 +77,11 @@
     {
       "_id": 6,
       "name": "Cocktail Dress",
+<<<<<<< HEAD
       "category": "kids",
+=======
+      "category": "dress",
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
       "description": "Chic cocktail dress for parties and events.",
       "price": 89.99,
       "image": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=2073&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -67,7 +91,11 @@
     {
       "_id": 7,
       "name": "Diamond Earrings",
+<<<<<<< HEAD
       "category": "traditionalwear",
+=======
+      "category": "jewellery",
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
       "description": "Sparkling diamond earrings that add elegance to any outfit.",
       "price": 299.99,
       "oldPrice": 349.99,
@@ -78,7 +106,11 @@
     {
       "_id": 8,
       "name": "Foundation",
+<<<<<<< HEAD
       "category": "formerwear",
+=======
+      "category": "cosmetics",
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
       "description": "High-coverage foundation for a flawless finish.",
       "price": 39.99,
       "image": "https://images.unsplash.com/photo-1599733589046-10c005739ef9?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -88,7 +120,11 @@
     {
       "_id": 9,
       "name": "Sunglasses",
+<<<<<<< HEAD
       "category": "casualwear",
+=======
+      "category": "accessories",
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
       "description": "Trendy sunglasses with UV protection.",
       "price": 49.99,
       "image": "https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
@@ -98,7 +134,11 @@
     {
       "_id": 10,
       "name": "Casual Pants",
+<<<<<<< HEAD
       "category": "formerwear",
+=======
+      "category": "dress",
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
       "description": "Comfortable maxi dress for casual outings.",
       "price": 59.99,
       "oldPrice": 79.99,

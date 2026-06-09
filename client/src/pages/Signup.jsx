@@ -2,15 +2,22 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+<<<<<<< HEAD
 import {useRegisterUserMutation} from "../redux/features/auth/authApi"
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+=======
+
+export default function Signup() {
+  const [showPassword, setShowPassword] = useState(false);
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+<<<<<<< HEAD
   const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("+977");
 const [city, setCity] = useState("");
@@ -32,10 +39,18 @@ const [city, setCity] = useState("");
   if (value.length > 14) return;
   setPhone(value);
 };
+=======
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
 
   const handleSignup = async (e) => {
     e.preventDefault();
 
+<<<<<<< HEAD
    const data = {
   name,
   email,
@@ -67,6 +82,24 @@ const [city, setCity] = useState("");
       navigate("/login");
     } catch (error) {
       setError(error?.data?.message || "Signup failed");
+=======
+    try {
+      setLoading(true);
+      setError("");
+
+      // ✅ FIXED API ENDPOINT
+      await axios.post("http://localhost:5005/api/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      // success → go login
+      navigate("/login");
+
+    } catch (err) {
+      setError(err.response?.data?.message || "Signup failed");
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
     } finally {
       setLoading(false);
     }
@@ -75,6 +108,7 @@ const [city, setCity] = useState("");
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md">
+<<<<<<< HEAD
         <div className="mb-10">
           <h1 className="text-3xl font-semibold text-zinc-900">Create account</h1>
           <p className="text-sm text-zinc-500 mt-2">Enter your details to get started.</p>
@@ -83,6 +117,27 @@ const [city, setCity] = useState("");
         {error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
 
         <form onSubmit={handleSignup} className="space-y-5">
+=======
+
+        <div className="mb-10">
+          <h1 className="text-3xl font-semibold text-zinc-900">
+            Create account
+          </h1>
+
+          <p className="text-sm text-zinc-500 mt-2">
+            Enter your details to get started.
+          </p>
+        </div>
+
+        {error && (
+          <div className="mb-4 text-red-500 text-sm">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSignup} className="space-y-5">
+
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
           {/* NAME */}
           <input
             type="text"
@@ -102,6 +157,7 @@ const [city, setCity] = useState("");
             className="w-full border px-4 py-3 rounded-lg"
             required
           />
+<<<<<<< HEAD
 {/* PHONE */}
 <input
   type="tel"
@@ -121,6 +177,8 @@ const [city, setCity] = useState("");
   className="w-full border px-4 py-3 rounded-lg"
   required
 />
+=======
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
 
           {/* PASSWORD */}
           <div className="relative">
@@ -132,6 +190,10 @@ const [city, setCity] = useState("");
               className="w-full border px-4 py-3 pr-12 rounded-lg"
               required
             />
+<<<<<<< HEAD
+=======
+
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
@@ -141,6 +203,7 @@ const [city, setCity] = useState("");
             </button>
           </div>
 
+<<<<<<< HEAD
           {/* CONFIRM PASSWORD */}
           <div className="relative">
             <input
@@ -175,11 +238,17 @@ const [city, setCity] = useState("");
             )}
           </div>
 
+=======
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
           {/* BUTTON */}
           <button
             type="submit"
             disabled={loading}
+<<<<<<< HEAD
             className="w-full cursor-pointer bg-black text-white py-3 rounded-lg disabled:opacity-60"
+=======
+            className="w-full bg-black text-white py-3 rounded-lg"
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
           >
             {loading ? "Creating..." : "Create Account"}
           </button>
@@ -187,10 +256,21 @@ const [city, setCity] = useState("");
 
         <p className="text-center mt-6 text-sm">
           Already have account?{" "}
+<<<<<<< HEAD
           <span onClick={() => navigate("/login")} className="cursor-pointer underline">
             Login
           </span>
         </p>
+=======
+          <span
+            onClick={() => navigate("/login")}
+            className="cursor-pointer underline"
+          >
+            Login
+          </span>
+        </p>
+
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
       </div>
     </div>
   );

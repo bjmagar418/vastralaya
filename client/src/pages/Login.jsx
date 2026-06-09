@@ -2,14 +2,18 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import axios from "axios";
+<<<<<<< HEAD
 import { useDispatch } from "react-redux";
 import { useLoginUserMutation } from "../redux/features/auth/authApi";
 import { setUser } from "../redux/features/auth/authSlice";
+=======
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+<<<<<<< HEAD
   const [identifier, setIdentifier] = useState(""); // email or phone
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -44,6 +48,56 @@ const handleLogin = async (e) => {
     setLoading(false);
   }
 };
+=======
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+      setError("");
+
+      const res = await axios.post(
+        "http://localhost:5005/api/auth/login",
+        { email, password }
+      );
+
+      const user = res.data;
+
+      // ✅ safety check
+      if (!user || !user.token) {
+        throw new Error("Invalid response from server");
+      }
+
+      // store auth data
+      localStorage.setItem("token", user.token);
+      localStorage.setItem("role", user.role);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // 🚀 ROLE BASED REDIRECT
+      if (user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/user/dashboard");
+      }
+
+    } catch (error) {
+      setError(
+        error.response?.data?.message ||
+        error.message ||
+        "Login failed"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md">
@@ -68,6 +122,7 @@ const handleLogin = async (e) => {
         {/* FORM */}
         <form className="space-y-5" onSubmit={handleLogin}>
 
+<<<<<<< HEAD
        {/* USERNAME */}
 <div>
   <label className="block text-sm text-zinc-700 mb-2">
@@ -82,6 +137,23 @@ const handleLogin = async (e) => {
     required
   />
 </div>
+=======
+          {/* EMAIL */}
+          <div>
+            <label className="block text-sm text-zinc-700 mb-2">
+              Email
+            </label>
+
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="john@gmail.com"
+              className="w-full border border-zinc-300 rounded-lg px-4 py-3 outline-none focus:border-zinc-900"
+              required
+            />
+          </div>
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
 
           {/* PASSWORD */}
           <div>
@@ -113,7 +185,11 @@ const handleLogin = async (e) => {
           <button
             type="submit"
             disabled={loading}
+<<<<<<< HEAD
             className="w-full cursor-pointer bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-lg"
+=======
+            className="w-full bg-zinc-900 hover:bg-zinc-800 text-white py-3 rounded-lg"
+>>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
           >
             {loading ? "Logging in..." : "Sign in"}
           </button>
