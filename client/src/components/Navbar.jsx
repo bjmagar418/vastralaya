@@ -232,7 +232,7 @@ const Navbar = () => {
 
             {/* Mobile/Tablet Menu Toggle button */}
             <button
-              className="xl:hidden text-2xl text-zinc-900 p-1 hover:bg-white/10 rounded-md transition-colors"
+              className="xl:hidden text-2xl text-zinc-900 cursor-pointer p-1 hover:bg-white/10 rounded-md transition-colors"
               onClick={() => setMenuOpen(!menuOpen)}
               aria-label={menuOpen ? "Close Menu" : "Open Menu"}
             >

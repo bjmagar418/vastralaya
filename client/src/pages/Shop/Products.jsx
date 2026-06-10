@@ -221,7 +221,7 @@ const Products = () => {
                   {/* CART BUTTON */}
                   <button
                     onClick={(e) => handleAddToCart(product, e)}
-                    className={`cursor-pointer absolute top-3 right-3 p-2 rounded-full transition z-10 bg-white/80 shadow-sm ${
+                    className={`cursor-pointer absolute top-5 right-5 p-2 rounded-full transition z-10 bg-white/80 shadow-sm ${
                       isInCart(product._id) ? "text-green-500" : "text-black hover:text-red-500"
                     }`}
                   >
@@ -231,7 +231,7 @@ const Products = () => {
                   {/* WISHLIST BUTTON */}
                   <button
                     onClick={(e) => handleAddToWish(product, e)}
-                    className={`cursor-pointer absolute top-3 left-3 p-2 rounded-full transition z-10 bg-white/80 shadow-sm ${
+                    className={`cursor-pointer absolute top-5 left-5 p-2 rounded-full transition z-10 bg-white/80 shadow-sm ${
                       isInWish(product._id) ? "text-red-500" : "text-black hover:text-red-500"
                     }`}
                   >

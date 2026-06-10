@@ -84,7 +84,7 @@ const TrendingProducts = () => {
                   {/* CART BUTTON */}
                   <button
                     onClick={(e) => handleAddToCart(product, e)}
-                    className={`absolute top-2 right-2 p-3 sm:p-2 rounded-full bg-white/80 backdrop-blur-xs shadow-xs transition z-10 ${
+                    className={`absolute top-5 right-5 p-3 sm:p-2 rounded-full bg-white/80 backdrop-blur-xs shadow-xs transition z-10 ${
                       isInCart(product._id)
                         ? "text-green-500"
                         : "text-black hover:text-red-500"
@@ -99,7 +99,7 @@ const TrendingProducts = () => {
                   {/* WISHLIST BUTTON */}
                   <button
                     onClick={(e) => handleAddToWish(product, e)}
-                    className={`cursor-pointer absolute top-2 left-2 p-3 sm:p-2 rounded-full bg-white/80 backdrop-blur-xs shadow-xs transition z-10 ${
+                    className={`cursor-pointer absolute top-5 left-5 p-3 sm:p-2 rounded-full bg-white/80 backdrop-blur-xs shadow-xs transition z-10 ${
                       isInWish(product._id)
                         ? "text-red-500"
                         : "text-black hover:text-red-500"
