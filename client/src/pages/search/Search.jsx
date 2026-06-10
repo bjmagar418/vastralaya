@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-// import ProductCards from '../Shop/ProductCards';
+ import ProductCards from '../Shop/ProductCards';
 import Products from '../Shop/Products';
 
 const Search = () => {

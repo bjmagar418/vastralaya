@@ -1,15 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 
-<<<<<<< HEAD
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-=======
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from "react-router-dom";
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
+
 
 import "remixicon/fonts/remixicon.css";
 
@@ -17,17 +11,12 @@ import App from "./App";
 
 import Home from "./pages/home/Home";
 import Login from "./pages/Login";
-<<<<<<< HEAD
 import Products from "./pages/Shop/Products";
-=======
-import Products from "./pages/Products";
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
-import Signup from "./pages/Signup";
+import Signup from "../src/pages/Signup.jsx";
 
 import UserDashboard from "./pages/user/UserDashboard";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
-<<<<<<< HEAD
 import Categories from "./pages/categoryPage/Categories";
 import CategoryProducts from "./pages/categoryPage/CategoryProducts";
 import AboutPage from "./pages/AboutPage";
@@ -37,16 +26,13 @@ import SingleProduct from "./pages/Shop/productDetails/SingleProduct";
 
  import { Provider } from "react-redux";
 import store from "../src/redux/store.js";
-=======
 
 // import { Provider } from "react-redux";
 // import { store } from "./redux/store.js";
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
 
 const root = document.getElementById("root");
 
 ReactDOM.createRoot(root).render(
-<<<<<<< HEAD
   // <Provider store={store}>
  <Provider store ={store}>
   <BrowserRouter>
@@ -100,7 +86,6 @@ ReactDOM.createRoot(root).render(
   </BrowserRouter>,
  </Provider>
 );
-=======
 
   // <Provider store={store}>
 
@@ -161,8 +146,7 @@ ReactDOM.createRoot(root).render(
   </BrowserRouter>
 
   // </Provider>
-);
 
 
 
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
+

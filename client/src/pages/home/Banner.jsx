@@ -1,54 +1,54 @@
 import React from 'react'
-<<<<<<< HEAD
 import { Link } from 'react-router'
 import bannerImg from '../../assets/header2.jpg'
 
 const Banner = () => {
   return (
-    /* header__container */
     <div
+      /* Changed min-h-[80vh] to min-h-[50vh] on mobile, returning to md:min-h-[80vh] on desktops */
       className="relative flex flex-col md:flex-row items-center justify-center md:justify-between 
-                  min-h-[88vh] px-8 md:px-12 lg:px-20 py-10 gap-8 
-                  bg-primary rounded-2xl mx-3 md:mx-6 my-3 overflow-hidden"
+                 min-h-[50vh] md:min-h-[80vh] px-8 md:px-12 lg:px-20 py-10 gap-8 
+                 bg-primary rounded-2xl mx-3 md:mx-6 my-3 overflow-hidden"
     >
-
-      {/* MOBILE ONLY: full background image — covers entire banner container */}
+      {/* BACKGROUND IMAGE FOR MOBILE ONLY */}
       <div
         className="absolute inset-0 md:hidden bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${bannerImg})` }}
       >
-        {/* overlay */}
+        {/* Dark overlay for mobile readability */}
         <div className="absolute inset-0 bg-black/45" />
       </div>
 
-      {/* MOBILE content — shown on mobile only */}
-      <div className="relative z-10 md:hidden flex flex-col gap-4 text-center w-full">
-        <h1 className="text-4xl font-extrabold leading-tight text-white drop-shadow-md">
+      {/* UNIFIED CONTENT BLOCK (Adapts beautifully from Mobile to Desktop) */}
+      <div className="relative z-10 flex flex-col gap-4 md:gap-5 flex-1 text-center md:text-left w-full">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white md:text-gray-900 drop-shadow-md md:drop-shadow-none">
           Redefine your <br />
           Style With{' '}
-          <span className="text-amber-400 italic">Vastralaya</span>
+          <span className="text-amber-400 md:text-amber-700 italic">Vastralaya</span>
         </h1>
-        <h4 className="tracking-wide text-sm text-white/90 font-semibold">
-          Premium fashion for Man,Woman,Kids
+        
+        <h4 className="tracking-wide text-sm md:text-lg text-white/90 md:text-gray-800 font-semibold">
+          Premium fashion for Man, Woman, Kids
         </h4>
-        <p className="text-sm text-white/80 max-w-xs mx-auto">
-          Discover the latest trend, timeless style and exclusive collection crafted for you.
+        
+        <p className="text-sm md:text-base text-white/80 md:text-gray-700 max-w-xs md:max-w-md mx-auto md:mx-0">
+          Discover the latest trends, timeless style, and exclusive collections crafted for you.
         </p>
-        {/* banner_btn */}
-        <div className="flex flex-row gap-3 justify-center mt-3 flex-wrap">
-          {/* btn */}
+
+        {/* Buttons */}
+        <div className="flex flex-row gap-3 md:gap-4 justify-center md:justify-start mt-3 md:mt-2 flex-wrap">
           <Link
             to="/shop"
-            className="bg-black text-white px-6 py-3 rounded-md text-sm 
+            className="bg-black text-white px-6 md:px-7 py-3 rounded-md text-sm 
                        font-bold hover:bg-gray-800 transition-colors duration-200"
           >
             Shop Now
           </Link>
-          {/* btn1 */}
+          
           <Link
             to="/category"
-            className="border-2 border-white text-white bg-transparent px-5 py-3 
-                       rounded-md text-sm font-semibold hover:bg-white hover:text-black 
+            className="border-2 border-white md:border-black text-white md:text-black bg-transparent px-5 md:px-6 py-3 
+                       rounded-md text-sm font-semibold hover:bg-white hover:text-black md:hover:bg-black md:hover:text-white 
                        transition-colors duration-200"
           >
             Explore Collection
@@ -56,73 +56,14 @@ const Banner = () => {
         </div>
       </div>
 
-      {/* LAPTOP: left content — hidden on mobile */}
-      <div className="hidden md:flex flex-col gap-5 flex-1 text-left z-10">
-        <h1 className="text-5xl lg:text-6xl font-extrabold leading-tight text-gray-900">
-          Redefine your <br />
-          Style With{' '}
-          <span className="text-amber-700 italic">Vastralaya</span>
-        </h1>
-        <h4 className="tracking-wide text-lg text-gray-800 font-semibold">
-          Premium fashion for Man,Woman,Kids
-        </h4>
-        <p className="text-base text-gray-700 max-w-md">
-          Discover the latest trend, timeless style and exclusive collection crafted for you.
-        </p>
-        {/* banner_btn */}
-        <div className="flex flex-row gap-4 mt-2 flex-wrap">
-          {/* btn */}
-          <Link
-            to="/shop"
-            className="bg-black text-white px-7 py-3 rounded-md text-sm 
-                       font-bold hover:bg-gray-800 transition-colors duration-200"
-          >
-            Shop Now
-          </Link>
-          {/* btn1 */}
-          <Link
-            to="/category"
-            className="border-2 border-black text-black bg-transparent px-6 py-3 
-                       rounded-md text-sm font-semibold hover:bg-black hover:text-white 
-                       transition-colors duration-200"
-          >
-            Explore Collection
-          </Link>
-        </div>
+      {/* LAPTOP IMAGE CONTAINER (Hidden on mobile, flex on desktop) */}
+      <div className="hidden md:flex flex-1 items-center justify-center">
+        <img
+          src={bannerImg}
+          alt="banner"
+          className="max-h-[380px] w-auto object-contain rounded-2xl shadow-md"
+        />
       </div>
-
-      {/* header__image — laptop only */}
- {/* header__image — laptop only */}
-<div className="hidden md:flex flex-1 items-center justify-center self-stretch">
-  <img
-    src={bannerImg}
-    alt="bannerimage1"
-    className="w-full h-full object-cover rounded-2xl"
-  />
-</div>
-
-=======
-import {Link} from 'react-router';
-import bannerImg from '../../assets/header1.jpeg';
-
-const Banner = () => {
-  return (
-    <div className=' header__container'>
-      <div className='header__content z-30'>
-        <h1 className='text-sm '>Redefine your <br/>Style With  <span className='decoration-amber-600'>Vastralaya</span> </h1>
-        <h4 className='tracking-wide'>Premium fashion for Man,Woman,Kids</h4>
-  <p>Discover the latest trend,timeless style and exclusive collection creafted for you.</p>
-    <div className='flex gap-8'>
-  <button className='btn bg-black text-white'><Link to='/shop'>Shop Now</Link></button>
-          <button className='btn1'><Link to='/shop'>Explore Collection</Link></button>
-    </div>
-   
-
-      </div>
-      <div className='header__image '>
-        <img src={bannerImg} alt='bannerimage1'/>
-      </div>
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
     </div>
   )
 }

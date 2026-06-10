@@ -1,20 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
 const initialState = {
   products:[],
   selectedItems:0,
   totalPrice:0,
   tax:0,
-<<<<<<< HEAD
+
   taxRate:0.13,
   DELIVERY_FEE:129,
-=======
   taxRate:0.05,
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
   grandTotal:0
 };
 const cartSlice = createSlice({
@@ -65,13 +59,11 @@ state.selectedItems =0;
 state.totalPrice=0;
 state.tax=0;
 state.grandTotal=0
-<<<<<<< HEAD
+
 },
-=======
 }
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
   },
-});
+);
 //utilities function
 export const setSelectedItems = (state) =>
   state.products.reduce((total, product) => {
@@ -87,13 +79,5 @@ export const setSelectedItems = (state) =>
     export const setGrandTotal =(state)=> {
     return setTotalPrice(state) + setTotalPrice(state) * state.taxRate
     }
-<<<<<<< HEAD
-
-
-
-
-
-=======
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
     export const {addToCart,updateQuantity,removeFromCart,clearCart} =cartSlice.actions;
     export default cartSlice.reducer;

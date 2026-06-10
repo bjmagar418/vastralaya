@@ -1,33 +1,57 @@
-<<<<<<< HEAD
-import React from "react";
-import dealsImg from "../../assets/deals.png";
-import { Link } from "react-router";
+import React from 'react';
+import { Link } from 'react-router-dom'; // Keeping router targets standardized
+import dealsImg from '../../assets/deals.png';
 
 const DealSection = () => {
+  const countdownData = [
+    { value: "14", label: "Days" },
+    { value: "20", label: "Hours" },
+    { value: "15", label: "Mins" },
+    { value: "05", label: "Sec" }
+  ];
+
   return (
-    <section className="w-full h-full bg-pink-300 rounded-lg p-4 sm:p-5 lg:p-6 flex flex-col gap-3 items-center lg:items-start">
-      <h4 className="text-xl sm:text-2xl font-bold text-red-600 text-center lg:text-left">Flash Sale</h4>
-      <h5 className="text-sm sm:text-base font-semibold text-center lg:text-left">Up To 20% Discount</h5>
-      <p className="text-xs sm:text-sm text-gray-700 text-center lg:text-left">Limited Time Offer</p>
-      <div className="grid grid-cols-4 gap-2 mt-2 w-full">
-        {["Days", "Hours", "Mins", "Sec"].map((label, i) => (
-          <div key={i} className="bg-white rounded-md shadow p-1 sm:p-2 text-center">
-            <h4 className="text-sm sm:text-lg font-bold text-red-600">
-              {["14", "20", "15", "05"][i]}
+    <section className="w-full h-full bg-pink-300 rounded-lg p-5 lg:p-8 flex flex-col gap-4 items-center lg:items-start">
+      <h4 className="text-xl sm:text-2xl font-extrabold text-red-600 text-center lg:text-left tracking-wide">
+        Flash Sale
+      </h4>
+      <h5 className="text-base sm:text-lg font-bold text-gray-900 text-center lg:text-left">
+        Up To 20% Discount
+      </h5>
+      <p className="text-xs sm:text-sm text-gray-700 text-center lg:text-left font-medium">
+        Limited Time Offer
+      </p>
+
+      {/* Countdown Grid */}
+      <div className="grid grid-cols-4 gap-2 mt-2 w-full max-w-sm">
+        {countdownData.map((item, i) => (
+          <div key={i} className="bg-white rounded-md shadow p-2 text-center border border-pink-100">
+            <h4 className="text-base sm:text-lg font-extrabold text-red-600">
+              {item.value}
             </h4>
-            <p className="text-[10px] sm:text-xs">{label}</p>
+            <p className="text-[10px] sm:text-xs text-gray-500 font-semibold uppercase tracking-wider">
+              {item.label}
+            </p>
           </div>
         ))}
       </div>
-      <button className="cursor-pointer bg-black text-white w-28 sm:w-32 rounded-md hover:bg-red-600 p-2 mt-2 text-sm sm:text-base active:bg-red-600 active:scale-95">
-        <Link to="/shop">Shop Now</Link>
-      </button>
 
-      {/* mt-2 instead of mt-auto — keeps image close to button */}
-      <div className="flex justify-center mt-2 w-full">
+      {/* Action Button */}
+      <Link 
+        to="/shop" 
+        className="mt-2 text-center cursor-pointer bg-black text-white font-bold text-sm sm:text-base 
+                   w-32 py-2.5 rounded-md transition-all duration-200 
+                   hover:bg-red-600 active:scale-95 shadow-md block"
+      >
+        Shop Now
+      </Link>
+
+      {/* Image Container */}
+      <div className="flex justify-center mt-4 w-full">
         <img
           src={dealsImg}
-          className="w-55 sm:w-55 lg:w-100  object-contain"
+          alt="Flash Sale Promo Deals"
+          className="w-48 sm:w-56 lg:w-72 object-contain"
         />
       </div>
     </section>
@@ -35,43 +59,3 @@ const DealSection = () => {
 };
 
 export default DealSection;
-=======
-import React from 'react'
-import dealsImg from '../../assets/deals.png'
-import { Link } from 'react-router';
-const DealSection = () => {
-  return (
-    <section className=' deals__container rounded-lg bg-pink-300'>
-      <div className='deals__content'>
-        <h4>Flash Sale</h4>
-    <h5>Up To 20% Discount</h5>
-    <p>Limited Time Offer</p>
-     <div className='deals__countdown  grid grid-cols-4 gap-2 flex-wrap '>
-     <div className='deals__countdown__card radius-md'>
-     <h4>14</h4>
-     <p>Days</p>
-     </div>
-      <div className='deals__countdown__card'>
-     <h4>20</h4>
-     <p>Hours</p>
-     </div> 
-     <div className='deals__countdown__card'>
-     <h4>15</h4>
-     <p>Mins</p>
-     </div>
-      <div className='deals__countdown__card'>
-     <h4>05</h4>
-     <p>Sec</p>
-     </div>
-     </div>
-       <button className=' bg-black text-white w-32 rounded-md hover:bg-red-600 p-2'><Link to='/shop'>Shop Now</Link></button>
-      </div>
-      <div className='deals__image'>
-        <img src={dealsImg} alt=''/>
-      </div>
-    </section>
-  )
-}
-
-export default DealSection
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88

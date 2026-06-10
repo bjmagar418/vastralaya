@@ -1,4 +1,32 @@
-<<<<<<< HEAD
+
+// // import User from "../models/User.js";
+// // import bcrypt from "bcryptjs";
+
+// // const seedUsers = async () => {
+// //   try {
+// //     const adminExists = await User.findOne({ email: "admin@vastralaya.com" });
+
+// //     if (adminExists) {
+// //       console.log("Admin already exists");
+// //       return;
+// //     }
+
+// //     // const hashedPassword = await bcrypt.hash("admin123", 10);
+
+// //     await User.create({
+// //       name: "Admin",
+// //       email: "admin@vastralaya.com",
+// //       password: "admin123",
+// //       role: "admin",
+// //     });
+
+// //     console.log("Admin seeded successfully");
+// //   } catch (error) {
+// //     console.log("Seed error:", error.message);
+// //   }
+// // };
+
+// // export default seedUsers;
 // import User from "../models/User.js";
 // import bcrypt from "bcryptjs";
 
@@ -27,33 +55,3 @@
 // };
 
 // export default seedUsers;
-=======
-import User from "../models/User.js";
-import bcrypt from "bcryptjs";
-
-const seedUsers = async () => {
-  try {
-    const adminExists = await User.findOne({ email: "admin@vastralaya.com" });
-
-    if (adminExists) {
-      console.log("Admin already exists");
-      return;
-    }
-
-    // const hashedPassword = await bcrypt.hash("admin123", 10);
-
-    await User.create({
-      name: "Admin",
-      email: "admin@vastralaya.com",
-      password: "admin123",
-      role: "admin",
-    });
-
-    console.log("Admin seeded successfully");
-  } catch (error) {
-    console.log("Seed error:", error.message);
-  }
-};
-
-export default seedUsers;
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88

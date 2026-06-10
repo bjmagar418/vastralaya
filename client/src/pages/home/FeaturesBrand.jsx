@@ -3,7 +3,6 @@ import brandsData from "../../data/brands.json";
 import image1 from "../../assets/admin.png";
 import RatingStar from "../../components/RatingStar";
 
-<<<<<<< HEAD
 const reviews = [
   {
     name: "Aarav Shrestha",
@@ -21,104 +20,64 @@ const reviews = [
 
 const FeaturesBrand = () => {
   return (
-    <div className=" px-2 py-6 sm:px-0 lg:px-8">
-      <h1 className="font-bold text-xl sm:text-xl mb-6">
-        Features Brand
+    <div className="px-4 py-1 sm:px-6 lg:px-16 max-w-[1400px] mx-auto">
+      <h1 className="font-extrabold text-xl lg:text-2xl mb-6 text-gray-900">
+        Featured Brands
       </h1>
 
-      {/* Main layout: stacked on mobile, side-by-side on lg+ */}
-      <div className=" flex flex-col lg:grid lg:grid-cols-3 gap-6">
+      {/* Main layout: stacked on mobile, grid side-by-side on lg+ */}
+      <div className="flex flex-col lg:grid lg:grid-cols-3 gap-8 items-center">
 
-        {/* Brand logos — full width on mobile, 1 col on lg */}
-        <div className="grid grid-cols-5 gap-4 lg:col-span-1 lg:h-32 lg:content-end ">
+        {/* Brand logos — grid layout */}
+        <div className="grid grid-cols-5 gap-4 w-full lg:col-span-1 lg:pt-12">
           {brandsData.map((brand, index) => (
-            <div key={index} className="w-full">
+            <div key={index} className="w-full flex items-center justify-center">
               <img
                 src={brand.imageUrl}
-                className="w-full h-10 object-contain"
+                className="w-full h-10 object-contain filter grayscale hover:grayscale-0 transition-all duration-200"
                 alt={`brand-${index}`}
               />
             </div>
           ))}
         </div>
 
-        {/* Reviews section — full width on mobile, 2 cols on lg */}
-        <div className="flex flex-col gap-6 lg:col-span-2">
-          <h1 className="text-lg sm:text-xl font-semibold">
+        {/* Reviews section — full width on mobile, 2 cols wide on desktop */}
+        <div className="flex flex-col gap-5 w-full lg:col-span-2">
+          <h1 className="text-lg lg:text-xl font-bold text-gray-900">
             What our customers say
           </h1>
 
-          {/* Cards: 1 col mobile → 3 cols on md+ */}
-          <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-9">
+          {/* Cards: 1 col mobile → 2 cols tablet → 3 cols desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {reviews.map((review, index) => (
               <div
                 key={index}
-                className="brand_card shadow-lg rounded-xl p-4 flex flex-col items-center text-center gap-2"
+                className="brand_card bg-white shadow-md rounded-xl p-5 flex flex-col items-center justify-center text-center gap-4 border border-gray-100"
               >
+                {/* Image centered using mx-auto */}
                 <img
                   src={image1}
                   alt={review.name}
-                  className="w-14 h-14 rounded-full object-cover"
+                  className="w-14 h-14 rounded-full object-cover ring-2 ring-gray-100 mx-auto"
                 />
-                <div>
-                  <h2 className="font-semibold text-sm sm:text-base">
+                
+                <div className="flex flex-col items-center justify-center gap-1 w-full">
+                  <h2 className="font-bold text-sm sm:text-base text-gray-800">
                     {review.name}
                   </h2>
                   <RatingStar />
-                  <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                    {review.text}
+                  <p className="text-xs sm:text-sm text-gray-600 mt-1 leading-relaxed">
+                    "{review.text}"
                   </p>
                 </div>
               </div>
             ))}
-=======
-const FeaturesBrand = () => {
-  return (
-    <div className="featuresBrand grid grid-cols-3">
-      <h1 className="col-span-3 font-extrabold">Features Brand</h1>
-      <div className=" grid grid-cols-5 gap-1 col-span-1 h-32  content-end">
-        {brandsData.map((brand, index) => (
-          <div key={index} className=" w-full">
-            <img src={brand.imageUrl} className="w-full h-10 object-contain align-middle" />
-          </div>
-        ))}
-      </div>
-      <div className="featuuresBrand2 flex flex-col col-span-2 ">
-        <h1>What our customer says</h1>
-        <div className="flex gap-2">
-          <div className="brand_card shadow-xl/30 ">
-            <img src={image1} alt={image1} />
-            <div>
-              <h1>Aarav Shrestha</h1>
-              <RatingStar/>
-              <p>Amazing quality and fast delivery! Vastralaya has the best collection of trendy fashion</p>
-            </div>
-          </div>
-          <div className="brand_card shadow-xl/30 ">
-            <img src={image1} alt={image1} />
-            <div>
-              <h1>suman Shrestha</h1>
-              <RatingStar/>
-              <p>Amazing quality and fast delivery! Vastralaya has the best collection of trendy fashion</p>
-            </div>
-          </div>
-          <div className="brand_card shadow-xl/30 ">
-            <img src={image1} alt={image1} />
-            <div>
-              <h1>PRabha joshi</h1>
-              <RatingStar/>
-              <p>Amazing quality and fast delivery! Vastralaya has the best collection of trendy fashion</p>
-            </div>
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
           </div>
         </div>
+
       </div>
     </div>
   );
 };
 
-<<<<<<< HEAD
 export default FeaturesBrand;
-=======
-export default FeaturesBrand;
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88

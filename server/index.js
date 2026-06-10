@@ -1,14 +1,9 @@
 import express from "express";
-<<<<<<< HEAD
 import fs from "fs";
-=======
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
 import dotenv from "dotenv";
 import cors from "cors";
-
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
-<<<<<<< HEAD
 //import seedUsers from "./seed/seedUsers.js";
 
 import userRoute from "../server/routes/userRoute.js";
@@ -19,10 +14,8 @@ import config from "./config/config.js";
 import logger from "./middleware/logger.js";
 import auth from "./middleware/auth.js";
 
-=======
 import productsRoutes from "./routes/productsRoutes.js";
-import seedUsers from "./seed/seedUsers.js";
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
+//import seedUsers from "./seed/seedUsers.js";
 
 dotenv.config();
 
@@ -30,7 +23,6 @@ connectDB();
 
 const app = express();
 
-<<<<<<< HEAD
 
 // Middleware
 app.use(express.json({ limit: "25mb" })); // Combined your json parsing and limits hereapp.use((express.urlencoded({ limited: "25mb" })));
@@ -53,7 +45,6 @@ app.use("/api/users",auth, userRoute);
 
 //auth routes
 app.use("/api/auth", authRoutes);
-=======
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -63,19 +54,14 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productsRoutes);
 
 // Run seed ONLY ONCE safely
-seedUsers();
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
+//seedUsers();
 
 // Test Route
 app.get("/", (req, res) => {
   res.send("Vastralaya Server is Running!");
 });
 
-<<<<<<< HEAD
 const PORT = config.port ;
-=======
-const PORT = process.env.PORT || 5005;
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

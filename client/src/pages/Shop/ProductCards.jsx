@@ -33,7 +33,7 @@ const ProductCards = ({products}) => {
         </div>
             </div>
             {/*products description*/}
-            <div className='product__card__content w-full'>
+            <div className=' w-full'>
    <h4 className='w-full'>{product.name}</h4>
     <p>NPR{product.price} {product.oldPrice ? <s>NPR{product?.oldPrice}</s>:null}</p>
    <RatingStar rating={product.rating}/>

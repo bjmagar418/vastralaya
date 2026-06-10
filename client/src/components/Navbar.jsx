@@ -1,32 +1,32 @@
-<<<<<<< HEAD
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/logo.jpeg";
-import { useNavigate } from "react-router-dom";
+import avatarImg from "../../src/assets/avatar.png";
 import CartModel from "../pages/Shop/productDetails/CartModel";
 import WishModel from "../pages/Shop/productDetails/WishModel";
-import avatarImg from '../../src/assets/avatar.png';
-
-
-import { useDispatch, useSelector } from "react-redux";
 import { useLogoutUserMutation } from "../redux/features/auth/authApi";
 import { logout } from "../redux/features/auth/authSlice";
 
 const Navbar = () => {
-const products = useSelector((state) => state.cart.products)
-const wishProducts = useSelector((state) => state.wish.products);
-console.log(products);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const products = useSelector((state) => state.cart.products);
+  const wishProducts = useSelector((state) => state.wish.products);
+  const { user } = useSelector((state) => state.auth);
+
+  const [logoutUser] = useLogoutUserMutation();
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [isCartOpen, setisCartOpen] = useState(false);
   const [isWishOpen, setisWishOpen] = useState(false);
+  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const [navSearchQuery, setNavSearchQuery] = useState("");
-
-
-
-  const navigate = useNavigate();
 
   const handleWishToggle = () => setisWishOpen(!isWishOpen);
   const handleCartToggle = () => setisCartOpen(!isCartOpen);
+  const handleDropDownToggle = () => setIsDropDownOpen(!isDropDownOpen);
 
   const handleNavSearch = () => {
     if (navSearchQuery.trim()) {
@@ -35,111 +35,61 @@ console.log(products);
       navigate("/search");
     }
   };
-  
-  // show user if logged in or not
-  const dispatch = useDispatch();
-  const {user} = useSelector((state)=> state.auth);
-//console.log(user);
-const [logoutUser] = useLogoutUserMutation();
 
-//dropdown menus
-const [isDropDownOpen,setIsDropDownOpen] = useState(false);
-const handleDropDownToggle =  () =>{
-  setIsDropDownOpen(!isDropDownOpen);
-}
+  const handleLogout = async () => {
+    try {
+      await logoutUser().unwrap();
+      dispatch(logout());
+      setIsDropDownOpen(false);
+      navigate("/");
+    } catch (error) {
+      console.error("Failed to logout:", error);
+    }
+  };
 
-// admin dropdown menus
-const adminDropDownMenus = [
-  {label: "Dashboard",path:"/dashboard/admin"},
-    {label: "Manage Items",path:"/dashboard/manage-products"},
-  {label: "All Orders",path:"/dashboard/manage-orders"},
-  {label: "Add New Post",path:"/dashboard/add-new-post"},
-]
+  const adminDropDownMenus = [
+    { label: "Dashboard", path: "/admin/dashboard" },
+    { label: "Manage Items", path: "/admin/manage-items" },
+    { label: "All Orders", path: "/admin/manage-orders" },
+    { label: "Add New Post", path: "/admin/add-product" },
+  ];
 
-//user dropdown menus
-const userDropDownMenus = [
-  {label: "Dashboard",path:"/dashboard/admin"},
-    {label: "Profile",path:"/dashboard/profile"},
-  {label: "Payments",path:"/dashboard/payments"},
-  {label: "Orders",path:"/dashboard/orders"},
-]
+  const userDropDownMenus = [
+    { label: "Dashboard", path: "/user/dashboard" },
+    { label: "Profile", path: "/user/profile" },
+    { label: "Payments", path: "/user/payments" },
+    { label: "Orders", path: "/user/orders" },
+  ];
 
-const dropdownMenus = user?.role === "admin" ? [...adminDropDownMenus]: [...userDropDownMenus];
+  const dropdownMenus =
+    user?.role === "admin" ? adminDropDownMenus : userDropDownMenus;
 
-const handleLogout = async() =>{
-  try {
-    await logoutUser().unwrap();
-  dispatch(logout());
-  navigate("/")
-  } catch (error) {
-  console.error("Failed to logout");
-  }
-
-}
   return (
     <>
-      <nav className="px-4 py-2">
-        {/* TOP ROW: Logo + Icons + Hamburger */}
-        <div className="flex items-center justify-between">
-          {/* LOGO */}
-          <div className="flex items-center gap-2">
+      {/* Sticky top wrapper with controlled layout bounds */}
+      <nav className="sticky top-0 z-50 bg-white shadow-md px-4 sm:px-6 lg:px-8 py-4 lg:py-5">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 pr-6 md:pr-12 xl:pr-16">
+          
+          {/* LOGO SECTION - Added right margin to separate brand text from Home links */}
+          <div className="flex items-center gap-4 mr-6 md:mr-12 xl:mr-20">
             <img
               src={logo}
-              alt="logo"
-              className="h-[48px] w-auto object-contain"
+              alt="Vastralaya logo"
+              className="h-10 w-auto md:h-12 object-contain rounded-md"
             />
             <Link
               to="/"
-              className="flex flex-col leading-none font-bold text-2xl"
+              className="flex flex-col leading-none font-bold text-xl md:text-2xl text-zinc-900 tracking-tight"
             >
-=======
-import React from "react";
-import { Link } from "react-router";
-import logo from "../assets/logo.jpeg";
-
-const Navbar = () => {
-  return (
-    <>
-      <header>
-        {/*upper*/}
-        <div className=" flex justify-between  bg-primary text-sm font-light">
-          <div className="flex justify-evenly items-center">
-            <div className="flex gap-2">
-              <i className="ri-caravan-line"></i>
-              <span>Free Shipping on Orders Above NPR 1999</span>
-            </div>
-            <div className="flex gap-2">
-              <i className="ri-exchange-dollar-line"></i>
-              <span>Easy Returns</span>
-            </div>
-            <div className="flex gap-2">
-              <i className="ri-git-repository-private-line"></i>
-              <span>Secure Payments</span>
-            </div>
-          </div>
-          <div className="flex gap-3">
-            <i className="ri-discount-percent-line"></i>{" "}
-            <span>Get 100% discount first order</span>
-          </div>
-        </div>
-
-        <nav className="flex items-center justify-between px-4 py-2">
-
-          {/* LOGO */}
-          <div className="flex items-center gap-2">
-            <img src={logo} alt="logo" className="h-[48px] w-auto object-contain" />
-            <Link to="/" className="flex flex-col leading-none font-bold text-2xl">
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
               VASTRALAYA
-              <span className="text-sm font-normal self-center">
+              <span className="text-[10px] md:text-xs font-normal tracking-normal text-zinc-800 mt-0.5">
                 Redefine your style
               </span>
             </Link>
           </div>
 
-<<<<<<< HEAD
-          {/* NAV LINKS */}
-          <ul className="hidden lg:flex flex-1 flex-wrap justify-center items-center gap-6 text-base font-medium">
+          {/* DESKTOP NAV LINKS */}
+          <ul className="hidden xl:flex flex-1 items-center justify-start gap-6 xl:gap-8 text-base font-semibold">
             {[
               { to: "/", label: "Home" },
               { to: "/shop", label: "Shop" },
@@ -148,182 +98,180 @@ const Navbar = () => {
               { to: "/contact", label: "Contact" },
             ].map(({ to, label }) => (
               <li key={to}>
-                <Link
+                <NavLink
                   to={to}
-                  className="hover:text-red-500 text-xl font-semibold"
+                  className={({ isActive }) =>
+                    `text-lg font-bold whitespace-nowrap transition-colors duration-200 ${
+                      isActive
+                        ? "text-red-600"
+                        : "text-zinc-900 hover:text-red-600"
+                    }`
+                  }
                 >
                   {label}
-                </Link>
+                </NavLink>
               </li>
             ))}
           </ul>
 
-          {/* ICONS + BUTTONS */}
-          <div className="flex items-center gap-4">
-            {/* Search */}
-            <div className="hidden lg:flex items-center border border-gray-300 rounded-md px-3 py-1">
-              <input
-                type="text"
-                placeholder="Search products"
-                value={navSearchQuery}
-                onChange={(e) => setNavSearchQuery(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleNavSearch()}
-                className="text-sm bg-transparent focus:outline-none w-32"
-              />
-              <i
-                className="ri-search-line cursor-pointer"
-                onClick={handleNavSearch}
-              ></i>
-            </div>
+          {/* DESKTOP SEARCH BAR */}
+          <div className="hidden lg:flex items-center bg-white/20 hover:bg-white/30 focus-within:bg-white/40 border border-zinc-900/10 rounded-lg max-w-xs xl:max-w-sm w-full px-3 py-1.5 transition-all">
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={navSearchQuery}
+              onChange={(e) => setNavSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleNavSearch()}
+              className="text-sm bg-transparent focus:outline-none flex-1 text-zinc-900 placeholder-zinc-700 font-medium"
+            />
+            <button
+              onClick={handleNavSearch}
+              aria-label="Search"
+              className="pl-2 border-l border-zinc-900/20 text-zinc-900 hover:text-red-600 transition-colors"
+            >
+              <i className="ri-search-line cursor-pointer text-lg"></i>
+            </button>
+          </div>
 
-            {/* Wishlist */}
+          {/* INTERACTION CONTROLS & UTILITIES */}
+          <div className="flex items-center gap-3 sm:gap-4 md:gap-5 flex-shrink-0">
             {/* Wishlist */}
             <button
               onClick={handleWishToggle}
-              className="relative cursor-pointer"
+              className="relative p-1 text-zinc-900 hover:text-red-600 transition-colors"
+              aria-label="View Wishlist"
             >
-              <i className="ri-heart-line hover:text-red-500 text-xl active:text-red-500"></i>
-              {wishProducts.length> 0 && (
-                <sup className="absolute -top-2 -right-2 text-xs w-4 h-4 flex items-center justify-center bg-red-500 text-white rounded-full">
+              <i className="ri-heart-line text-2xl"></i>
+              {wishProducts.length > 0 && (
+                <span className="absolute top-0 right-0 text-[10px] w-4 h-4 flex items-center justify-center bg-red-600 text-white rounded-full font-bold shadow-sm">
                   {wishProducts.length}
-                </sup>
+                </span>
               )}
             </button>
 
-            {/* Cart — badge now shows real count from useCart */}
+            {/* Cart */}
             <button
               onClick={handleCartToggle}
-              className="relative cursor-pointer"
+              className="relative p-1 text-zinc-900 hover:text-red-600 transition-colors"
+              aria-label="View Cart"
             >
-              <i className="ri-shopping-cart-line hover:text-red-500 text-xl active:text-red-500"></i>
+              <i className="ri-shopping-cart-line text-2xl"></i>
               {products.length > 0 && (
-                <sup className="absolute -top-2 -right-2 text-xs w-4 h-4 flex items-center justify-center bg-red-500 text-white rounded-full">
+                <span className="absolute top-0 right-0 text-[10px] w-4 h-4 flex items-center justify-center bg-red-600 text-white rounded-full font-bold shadow-sm">
                   {products.length}
-                </sup>
+                </span>
               )}
             </button>
 
-            {/* Log In / Sign Up */}
-          <div className="hidden lg:flex items-center gap-3">
-  {user && user ? (
-    <>
-      <div className="relative">
-        <img
-          onClick={handleDropDownToggle}
-          src={user?.profileImageUrl || avatarImg}
-          alt="profile or avatar image"
-          className="size-8 rounded-full object-cover cursor-pointer ring-2 ring-transparent hover:ring-red-400 transition-all duration-200"
-        />
-        {isDropDownOpen && (
-          <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-xl shadow-lg z-50">
-            <div className="px-4 py-3 border-b border-gray-100">
-              <p className="text-sm font-medium text-gray-800 truncate">{user?.name || "My Account"}</p>
-            </div>
-            <ul className="py-1">
-              {dropdownMenus.map((menu, index) => (
-                <li key={index}>
-                  <Link
-                    to={menu.path}
-                    onClick={() => setIsDropDownOpen(false)}
-                    className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500 transition-colors duration-150"
+            {/* User Profile / Auth System */}
+            <div className="relative">
+              {user ? (
+                <>
+                  <button
+                    onClick={handleDropDownToggle}
+                    className="flex items-center focus:outline-none"
+                    aria-label="User Account Options"
                   >
-                    {menu.label}
+                    <img
+                      src={user?.profileImageUrl || avatarImg}
+                      alt="User Profile"
+                      className="w-9 h-9 rounded-full object-cover ring-2 ring-zinc-900/10 hover:ring-zinc-900 transition-all duration-200"
+                    />
+                  </button>
+                  {isDropDownOpen && (
+                    <div className="absolute right-0 mt-3 w-56 bg-white border border-zinc-100 rounded-xl shadow-2xl z-50 py-1 animate-in fade-in slide-in-from-top-2 duration-150">
+                      <div className="px-4 py-3 border-b border-zinc-100">
+                        <p className="text-xs text-zinc-400 font-medium">
+                          Signed in as
+                        </p>
+                        <p className="text-sm font-bold text-zinc-800 truncate mt-0.5">
+                          {user?.name || "My Account"}
+                        </p>
+                      </div>
+                      <ul className="py-1 pr-10">
+                        {dropdownMenus.map((menu, index) => (
+                          <li key={index}>
+                            <Link
+                              to={menu.path}
+                              onClick={() => setIsDropDownOpen(false)}
+                              className="flex items-center px-4 py-2.5 text-sm text-zinc-700 hover:bg-zinc-50 hover:text-zinc-950 font-medium transition-colors"
+                            >
+                              {menu.label}
+                            </Link>
+                          </li>
+                        ))}
+                        <li className="border-t border-zinc-100 mt-1 pt-1">
+                          <button
+                            onClick={handleLogout}
+                            className="w-full text-left px-4 py-2.5 text-sm font-semibold text-red-500 hover:bg-red-50 transition-colors"
+                          >
+                            Log out
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="hidden lg:flex items-center gap-3">
+                  <Link
+                    to="/login"
+                    className="px-5 py-2 text-sm font-semibold text-zinc-900 shadow-md border-zinc-900/30 hover:bg-zinc-900 hover:text-white transition-all duration-200"
+                  >
+                    Log In
                   </Link>
-                </li>
-              ))}
+                  <Link
+                    to="/signup"
+                    className="px-5 py-2 text-sm font-semibold text-zinc-900 shadow-md border-zinc-900/30 hover:bg-zinc-900 hover:text-white transition-all duration-200"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+            </div>
 
-  <button
-  onClick={handleLogout}
-  className="cursor-pointer flex items-center w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-500 transition-colors duration-150"
->
-  Logout
-</button>
-            </ul>
-          </div>
-        )}
-      </div>
-    </>
-  ) : (
-    <Link
-      to="/login"
-      className="px-4 py-1 text-base font-medium text-gray-700 border border-gray-400 rounded hover:bg-red-500 hover:text-white hover:border-transparent transition-all duration-300"
-    >
-      Log In
-    </Link>
-  )}
-
- 
-{
-  user && user ? (
- <Link
-    to="/signup"
-    className=" hidden px-4 py-1 text-base font-medium text-gray-700 border border-gray-400 rounded hover:bg-red-500 hover:text-white hover:border-transparent transition-all duration-300"
-  >
-    Sign Up
-  </Link>
-  ):(
-  <Link
-    to="/signup"
-    className="px-4 py-1 text-base font-medium text-gray-700 border border-gray-400 rounded hover:bg-red-500 hover:text-white hover:border-transparent transition-all duration-300"
-  >
-    Sign Up
-  </Link>
-  )
-}
- 
-</div>
-
-            {/* Hamburger */}
+            {/* Mobile/Tablet Menu Toggle button */}
             <button
-              className="lg:hidden text-2xl cursor-pointer active:text-red-500"
+              className="xl:hidden text-2xl text-zinc-900 p-1 hover:bg-white/10 rounded-md transition-colors"
               onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? "Close Menu" : "Open Menu"}
             >
               <i className={menuOpen ? "ri-close-line" : "ri-menu-line"}></i>
             </button>
           </div>
         </div>
 
-        {/* MOBILE MENU */}
+        {/* Mobile menu */}
         {menuOpen && (
-          <div className="lg:hidden mt-3 flex flex-col gap-4 border-t pt-4 pb-2">
-=======
-          {/* NAV LINKS (CENTER - STRETCH FIX) */}
-          <ul className="flex flex-1 flex-wrap justify-center items-center gap-6 text-base font-medium">
-            <li><Link to="/" className="link">Home</Link></li>
-            <li><Link to="shop" className="link">Shop</Link></li>
-            <li><Link to="/pages" className="link">Category</Link></li>
-
-            {/* stretched items */}
-            <li className=" text-center">
-              <Link to="/login" className="link">Login</Link>
-            </li>
-
-            <li><Link to="/signup" className="link">Signup</Link></li>
-
-            <li className=" text-center">
-              <Link to="/pages" className="link">About us</Link>
-            </li>
-
-            <li><Link to="/pages" className="link">Contact</Link></li>
-          </ul>
-
-          {/* ICONS */}
-          <div className="flex items-center gap-4">
-
-            {/* search */}
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
-            <div className="flex items-center border border-gray-300 rounded-md px-3 py-1">
+          <div className="xl:hidden mt-4 flex flex-col gap-4 border-t border-zinc-900/10 pt-4 pb-2 animate-in fade-in duration-200">
+            {/* Search Input for Mobile/Tablets */}
+            <div className="flex lg:hidden items-center bg-white/20 border border-zinc-900/10 rounded-lg px-3 py-2">
               <input
                 type="text"
-                placeholder="Search products"
-<<<<<<< HEAD
-                className="text-sm bg-transparent focus:outline-none flex-1"
+                placeholder="Search products..."
+                value={navSearchQuery}
+                onChange={(e) => setNavSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleNavSearch();
+                    setMenuOpen(false);
+                  }
+                }}
+                className="text-sm bg-transparent focus:outline-none flex-1 text-zinc-900 placeholder-zinc-700 font-medium"
               />
-              <Link to="/search" onClick={() => setMenuOpen(false)}>
-                <i className="ri-search-line cursor-pointer"></i>
-              </Link>
+              <button
+                onClick={() => {
+                  handleNavSearch();
+                  setMenuOpen(false);
+                }}
+                aria-label="Search"
+              >
+                <i className="ri-search-line text-zinc-800 text-lg"></i>
+              </button>
             </div>
-            <ul className="flex flex-col gap-3 text-base font-semibold">
+
+            {/* Mobile/Tablet Navigation Hyperlinks */}
+            <ul className="flex flex-col gap-1 text-base font-semibold text-zinc-900">
               {[
                 { to: "/", label: "Home" },
                 { to: "/shop", label: "Shop" },
@@ -332,100 +280,86 @@ const Navbar = () => {
                 { to: "/contact", label: "Contact" },
               ].map(({ to, label }) => (
                 <li key={to}>
-                  <Link
+                  <NavLink
                     to={to}
-                    className="block hover:text-red-500 transition active:text-red-500"
                     onClick={() => setMenuOpen(false)}
+                    className={({ isActive }) =>
+                      `block py-2 px-2 rounded-md transition-colors ${
+                        isActive
+                          ? "text-red-600 bg-white/10 font-bold"
+                          : "text-zinc-900 hover:bg-white/5"
+                      }`
+                    }
                   >
                     {label}
-                  </Link>
+                  </NavLink>
                 </li>
               ))}
             </ul>
-            <div className="flex gap-3 mt-1">
 
-              {
-                 user && user? (<>
-              <img src= {user?.profileImageUrl ||avatarImg} alt= "profile or avataimage" className="size-13 cursor-pointer" />
-              </>) :(
-               <Link
-                to="/login"
-                onClick={() => setMenuOpen(false)}
-                className="flex-1 text-center px-4 py-2 text-base font-medium text-gray-700 border border-gray-400 rounded hover:bg-red-500 hover:text-white hover:border-transparent transition-all duration-300"
-              >
-                Log In
-              </Link>
-              )
-              }
-           
-          {
-  user && user ? (
- <Link
-    to="/signup"
-    className=" hidden px-4 py-1 text-base font-medium text-gray-700 border border-gray-400 rounded hover:bg-red-500 hover:text-white hover:border-transparent transition-all duration-300"
-  >
-    Sign Up
-  </Link>
-  ):(
-  <Link
-    to="/signup"
-    className="px-4 py-1 text-base font-medium text-gray-700 border border-gray-400 rounded hover:bg-red-500 hover:text-white hover:border-transparent transition-all duration-300"
-  >
-    Sign Up
-  </Link>
-  )
-}
+            {/* Mobile Auth Actions Block */}
+            <div className="flex gap-3 mt-1 pt-4 border-t border-zinc-900/10">
+              {user ? (
+                <div className="flex items-center gap-3 w-full bg-white/10 p-3 rounded-xl border border-white/10">
+                  <img
+                    src={user?.profileImageUrl || avatarImg}
+                    alt="avatar profile"
+                    className="w-10 h-10 rounded-full object-cover ring-2 ring-zinc-900/10"
+                  />
+                  <div>
+                    <p className="text-sm font-bold text-zinc-900">
+                      {user?.name}
+                    </p>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setMenuOpen(false);
+                      }}
+                      className="text-xs text-red-600 font-semibold mt-0.5 underline hover:text-red-700 transition-colors"
+                    >
+                      Logout Account
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex gap-3 w-full lg:hidden">
+                  <Link
+                    to="/login"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex-1 text-center py-2.5 text-sm font-bold shadow-rounded-md text-zinc-900 border border-zinc-900/30 bg-amber-500/20 rounded-lg hover:bg-white/20 rounded-md transition-all"
+                  >
+                    Log In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    onClick={() => setMenuOpen(false)}
+                    className="flex-1 text-center py-2.5 text-sm font-bold shadow-rounded-md text-black rounded-lg hover:bg-zinc-900 rounded-md transition-all"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}
       </nav>
 
-{isCartOpen && <CartModel products={products} isOpen={isCartOpen} onClose={handleCartToggle} />}
-{isWishOpen && <WishModel products={wishProducts} isOpen={isWishOpen} onClose={handleWishToggle} />}    </>
-=======
-                className="text-sm bg-transparent focus:outline-none w-32"
-              />
-              <Link to="/search">
-                <i className="ri-search-line cursor-pointer"></i>
-              </Link>
-            </div>
-
-            {/* wishlist */}
-            <button className="relative link cursor-pointer">
-              <i className="ri-heart-line"></i>
-              <sup className="absolute -top-2 -right-2 text-xs w-4 h-4 flex items-center justify-center text-black rounded-full">
-                0
-              </sup>
-            </button>
-
-            {/* cart */}
-            <button className="relative link cursor-pointer">
-              <i className="ri-restaurant-line"></i>
-              <sup className="absolute -top-2 -right-2 text-xs w-4 h-4 flex items-center justify-center text-black rounded-full">
-                0
-              </sup>
-            </button>
-
-            {/* login */}
-            <div className="flex items-center gap-4">
-              <Link to="/login" className="px-5 py-2 text-gray-700 font-medium hover:text-gray-900 transition">
-                Log In
-              </Link>
-              <Link to="/signup" className="px-5 py-2 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition">
-                Sign Up
-              </Link>
-            </div>
-          </div>
-
-        </nav>
-      </header>
+      {isCartOpen && (
+        <CartModel
+          products={products}
+          isOpen={isCartOpen}
+          onClose={handleCartToggle}
+        />
+      )}
+      {isWishOpen && (
+        <WishModel
+          products={wishProducts}
+          isOpen={isWishOpen}
+          onClose={handleWishToggle}
+        />
+      )}
     </>
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
   );
 };
 
 export default Navbar;
-<<<<<<< HEAD
-=======
-
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88

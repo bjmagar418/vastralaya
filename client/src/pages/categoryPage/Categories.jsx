@@ -15,8 +15,8 @@ const Categories = () => {
   },[])
   return (
         <div>
-          <h1  className="text-center text-base font-bold mb-6 p-2 sm:text-center sm:text-lg">Featured Category</h1>
-        <div  className=" sm:grid grid-cols-7  gap-4 p-14 categories_div1">
+          <h1  className="text-center text-base font-bold mb-6 py-6 sm:text-center sm:text-lg">Featured Category</h1>
+        <div  className=" sm:grid grid-cols-7  gap-4 px-12 py-5">
       {(categories || []).map((category, index) => (
       
         <CategoryCard
