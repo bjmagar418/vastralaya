@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router";
 
@@ -14,7 +15,8 @@ const TrendingProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [visibleProducts, setVisibleProducts] = useState(7);
+  // Tracks how many products to display
+  const [visibleProducts, setVisibleProducts] = useState(8);
   const loadMoreProducts = () => {
     setVisibleProducts((prevCount) => prevCount + 4);
   };
@@ -43,18 +45,33 @@ const TrendingProducts = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
+        // Fetching 20 items so "Load More" actually has data to cycle through
         const response = await axios.get(
-          "http://localhost:5005/api/products?limit=8",
+          "http://localhost:5005/api/products?limit=20"
         );
-        setProducts(response.data);
+        
+        // CRITICAL FIX: Verify API data format before setting state
+        if (Array.isArray(response.data)) {
+          setProducts(response.data);
+        } else if (response.data && Array.isArray(response.data.products)) {
+          // Fallback case if your backend wraps the array in an object like { products: [...] }
+          setProducts(response.data.products);
+        } else {
+          console.error("API response is not an array:", response.data);
+          setProducts([]);
+        }
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching products:", error);
+        setProducts([]);
       } finally {
         setLoading(false);
       }
     };
     fetchProducts();
   }, []);
+
+  // Safe array container fallback to absolutely guarantee .slice() won't crash
+  const safeProducts = Array.isArray(products) ? products : [];
 
   return (
     <section className="w-full block rounded-lg px-4 sm:px-6 md:px-10 lg:px-12 py-6">
@@ -75,10 +92,10 @@ const TrendingProducts = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full">
         {loading
           ? Array.from({ length: 8 }).map((_, i) => <ProductSkeleton key={i} />)
-          : products.slice(0, 8).map((product) => (
+          : safeProducts.slice(0, visibleProducts).map((product) => (
               <div
                 key={product._id}
-                className="bg-white  p-3 shadow-sm relative w-full flex flex-col justify-between"
+                className="bg-white p-3 shadow-sm relative w-full flex flex-col justify-between"
               >
                 <div>
                   {/* CART BUTTON */}
@@ -135,6 +152,18 @@ const TrendingProducts = () => {
               </div>
             ))}
       </div>
+
+      {/* LOAD MORE BUTTON */}
+      {!loading && safeProducts.length > visibleProducts && (
+        <div className="flex justify-center mt-8">
+          <button
+            onClick={loadMoreProducts}
+            className="px-6 py-2 bg-black text-white text-sm font-medium rounded-md hover:bg-gray-800 transition duration-200"
+          >
+            Load More Products
+          </button>
+        </div>
+      )}
     </section>
   );
 };

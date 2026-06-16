@@ -2,12 +2,17 @@ import productService  from "../services/productService.js"
 
 import fs from "fs/promises"
 const getAllProducts = async (req, res) => {
-
-
     try {
-        const limit = req.query.limit;
-        const products = await productService.getAllProducts(limit);
-        res.json(products);
+      //const limit = req.query.limit;
+      // const products = await productService.getAllProducts(req.query);
+      // res.json(products);
+
+      // Destructure the values coming from the service layer
+      const { products, totalPages, totalProducts } =
+        await productService.getAllProducts(req.query);
+
+      // Send them in the final JSON response
+      res.status(200).json({ products, totalPages, totalProducts });
     } catch (error) {
           res.status(500).json({
             message: error.message,
@@ -88,5 +93,43 @@ const deleteProduct = async(req,res) =>{
   }
 }
 
+const getBrands = async(req,res)=>{
+  const brands = await productService.getBrands();
+  res.json(brands);
+}
 
- export default {getAllProducts,createProduct,getCategories,getProductsByCategory,getProductById,updateProduct,deleteProduct};
+const getCategory = async (req, res) => {
+  const category = await productService.getCategory();
+  res.json(category);
+};
+
+const getTotalCount = async (req, res) => {
+  const totalCount = await productService.getTotalCount();
+  res.json(totalCount);
+};
+
+const getRelatedProducts = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "Product ID is required" });
+    }
+
+    const relatedProducts = await productService.getRelatedProducts(id);
+    return res.status(200).json(relatedProducts);
+  } catch (error) {
+    console.error("Error fetching the related products:", error);
+
+    if (error.message === "Product not found") {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch related products" });
+  }
+};
+
+ export default {getAllProducts,createProduct,getCategories,getProductsByCategory,getProductById,updateProduct,
+  deleteProduct,getBrands,getCategory,getTotalCount,getRelatedProducts};

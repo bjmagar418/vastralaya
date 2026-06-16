@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
- import ProductCards from '../Shop/ProductCards';
+ //import ProductCards from '../Shop/ProductCards';
 import Products from '../Shop/Products';
 
 const Search = () => {
@@ -10,39 +10,56 @@ const Search = () => {
   const [error, setError] = useState(null);
   const location = useLocation();
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('http://localhost:5005/api/products');
-        if (!response.ok) throw new Error(`Failed to fetch: ${response.status}`);
-        const data = await response.json();
-        setProducts(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProducts();
-  }, []);
-
-  useEffect(() => {
-    if (products.length === 0) return;
-    const params = new URLSearchParams(location.search);
-    const urlQuery = params.get('query') || '';
-    if (!urlQuery.trim()) {
-      setFilteredProducts(products);
-      return;
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      
+      // 1. Get the query from the URL search bar
+      const params = new URLSearchParams(location.search);
+      const urlQuery = params.get('query') || '';
+      
+      // 2. Pass it directly to your Express backend using the 'name' parameter
+      const response = await fetch(`http://localhost:5005/api/products?name=${encodeURIComponent(urlQuery)}`);
+      if (!response.ok) throw new Error(`Failed to fetch: ${response.status}`);
+      
+      const data = await response.json();
+      
+      // 3. Set the products returned by the server
+      setProducts(data.products || []);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-    const query = urlQuery.toLowerCase();
-    const filtered = products.filter((product) =>
-      product.name?.toLowerCase().includes(query) ||
-      product.category?.toLowerCase().includes(query) ||
-      product.price?.toString().includes(query)
-    );
-    setFilteredProducts(filtered);
-  }, [location.search, products]);
+  };
+  
+  // Re-run this block every time the user types a new search query
+  fetchProducts();
+}, [location.search]);
+
+
+  // useEffect(() => {
+  //   if (products.length === 0) return;
+  //   const params = new URLSearchParams(location.search);
+  //   const urlQuery = params.get('query') || '';
+  //   if (!urlQuery.trim()) {
+  //     setFilteredProducts(products);
+  //     return;
+  //   }
+  //   const query = urlQuery.toLowerCase();
+  //   const filtered = products.filter((product) =>
+  //     product.name?.toLowerCase().includes(query) ||
+  //     product.category?.toLowerCase().includes(query) ||
+  //     product.price?.toString().includes(query)
+  //   );
+  //   setFilteredProducts(filtered);
+  // }, [location.search, products]);
+useEffect(() => {
+  setFilteredProducts(products);
+}, [products]);
+
+
 
   return (
     <section className='min-h-screen px-4 sm:px-6 lg:px-12 py-8'>

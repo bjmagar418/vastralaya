@@ -16,7 +16,6 @@ const userSchema = new mongoose.Schema({
     validate: {
       validator: (value) => {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return emailRegex.test(value);
       },
       message: "Please enter a valid email address",
@@ -31,8 +30,8 @@ const userSchema = new mongoose.Schema({
 //   validator: (value) =>{
 //     const passwordRegex =
 //      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
-//     return passwordRegex.test(value);
-//   },
+//  return passwordRegex.test(value);
+//  },
 //  message: "Password must be at least 6,uppercase,lowercase,special character and number"
 //  }
  }, // // [6,"password must be at least 6 characters long"]
@@ -57,11 +56,6 @@ const userSchema = new mongoose.Schema({
       type: String,
         },
     province: String,
-    state: String,
-    country: {
-      type: String,
-      default: "Nepal",
-    },
   },
   role: {
     type: [String],

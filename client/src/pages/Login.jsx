@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
@@ -19,12 +20,14 @@ const Login = () => {
     e.preventDefault();
     setError("");
 
-    // Matches standard phone formats or local 10 digit variants
-    const isPhone = /^\+?977\d{10}$/.test(identifier) || /^\d{10}$/.test(identifier);
+    // Matches standard Nepal phone formats (+977...) or local 10-digit variants
+    const isPhone = /^\+?977\d{10}$/.test(identifier.trim()) || /^\d{10}$/.test(identifier.trim());
 
+    // Clean up input value and format payload conditionally
+    const cleanedIdentifier = identifier.trim();
     const data = isPhone
-      ? { phone: identifier.startsWith("+977") ? identifier : `+977${identifier}`, password }
-      : { email: identifier, password };
+      ? { phone: cleanedIdentifier.startsWith("+977") ? cleanedIdentifier : `+977${cleanedIdentifier}`, password }
+      : { email: cleanedIdentifier, password };
 
     try {
       const response = await loginUser(data).unwrap();
@@ -33,13 +36,14 @@ const Login = () => {
         throw new Error("Invalid response from server");
       }
 
+      // Destructure token and the remaining user object
       const { token, ...user } = response;
 
-      // Update local Redux storage state
-      dispatch(setUser({ user }));
+      // Update local Redux storage state (Passing token along is recommended if your slice needs it)
+      dispatch(setUser({ user, token }));
 
       // Role-based routing system navigation redirect paths
-      if (user?.role === "admin") {
+      if (user?.role === "admin" || user?.user?.role === "admin") {
         navigate("/admin/dashboard");
       } else {
         navigate("/user/dashboard");
@@ -50,7 +54,6 @@ const Login = () => {
   };
 
   return (
-    // Changed min-h-screen to pt-24 pb-12 so it coordinates with your fixed/absolute header placement
     <div className="w-full flex flex-col items-center justify-start bg-white px-4 pt-24 pb-12">
       <div className="w-full max-w-md">
 
@@ -74,16 +77,16 @@ const Login = () => {
         {/* FORM */}
         <form className="space-y-6" onSubmit={handleLogin}>
 
-          {/* SINGLE IDENTIFIER INPUT */}
+          {/* SINGLE IDENTIFIER INPUT (EMAIL OR PHONE) */}
           <div>
             <label className="block text-sm text-zinc-600 mb-2 font-normal">
-              Email
+              Email or Phone Number
             </label>
             <input
               type="text"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              placeholder="john@gmail.com"
+              placeholder="john@gmail.com or 98XXXXXXXX"
               className="w-full border border-zinc-200 rounded-xl px-4 py-3.5 text-zinc-800 placeholder-zinc-400 outline-none focus:border-zinc-400 focus:ring-1 focus:ring-zinc-400 transition-all duration-200"
               required
             />

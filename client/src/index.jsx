@@ -10,9 +10,9 @@ import "remixicon/fonts/remixicon.css";
 import App from "./App";
 
 import Home from "./pages/home/Home";
-import Login from "./pages/Login";
+import Login from "./pages/Login.jsx";
 import Products from "./pages/Shop/Products";
-import Signup from "../src/pages/Signup.jsx";
+import Signup from "./pages/Signup.jsx";
 
 import UserDashboard from "./pages/user/UserDashboard";
 

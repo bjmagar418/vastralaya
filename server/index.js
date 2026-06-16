@@ -1,67 +1,65 @@
+
+
 import express from "express";
 import fs from "fs";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
-//import seedUsers from "./seed/seedUsers.js";
-
 import userRoute from "../server/routes/userRoute.js";
-import productRoutes from "../server/routes/productRoute.js"
+import productsRoute from "./routes/productRoute.js"; // Kept this one, removed the duplicate path
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import config from "./config/config.js";
 import logger from "./middleware/logger.js";
 import auth from "./middleware/auth.js";
-
-import productsRoutes from "./routes/productsRoutes.js";
-//import seedUsers from "./seed/seedUsers.js";
+import  reviewRoute from "./routes/reviewRoute.js"
 
 dotenv.config();
 
+// Connect to Database
 connectDB();
 
 const app = express();
 
-
-// Middleware
-app.use(express.json({ limit: "25mb" })); // Combined your json parsing and limits hereapp.use((express.urlencoded({ limited: "25mb" })));
-app.use(cookieParser());
-app.use(bodyParser.json());
+// --- Middleware Configuration ---
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    credentials:true    // Adjust as needed for your frontend
+    origin: "http://localhost:5173", // Your frontend URL
+    credentials: true, // Allowed alongside the explicit origin above
   }),
 );
+
+// Body parsers
+app.use(express.json({ limit: "25mb" }));
+app.use(express.urlencoded({ limit: "25mb", extended: true })); // Fixed a small typo here ("limited" -> "limit")
+app.use(cookieParser());
+app.use(bodyParser.json()); // Optional, since express.json() already handles this
+
+// Logging
 app.use(logger);
 
-// Routes
+// --- Routes ---
 
-app.use("/api/products", productRoutes);
-// Run seed ONLY ONCE safely
-// seedUsers();
-app.use("/api/users",auth, userRoute);
-
-//auth routes
+// Public Auth Routes
 app.use("/api/auth", authRoutes);
-// Middleware
-app.use(cors());
-app.use(express.json());
 
-// Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/products", productsRoutes);
+// Protected User Routes (Requires Auth middleware)
+app.use("/api/users", auth, userRoute);
 
-// Run seed ONLY ONCE safely
-//seedUsers();
+// Product Routes
+app.use("/api/products", productsRoute);
 
-// Test Route
+app.use("/api/review", reviewRoute);
+
+
+// Base Test Route
 app.get("/", (req, res) => {
   res.send("Vastralaya Server is Running!");
 });
 
-const PORT = config.port ;
+// --- Server Initialization ---
+const PORT = config.port || 5005;
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

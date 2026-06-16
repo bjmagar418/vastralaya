@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // import jwt from "jsonwebtoken";
 
 // export const protect = (req, res, next) => {
@@ -16,22 +15,22 @@
 //     return res.status(401).json({ message: "Token invalid" });
 //   }
 // };
-=======
-import jwt from "jsonwebtoken";
 
-export const protect = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+// import jwt from "jsonwebtoken";
 
-  if (!token) {
-    return res.status(401).json({ message: "No token, unauthorized" });
-  }
+// export const protect = (req, res, next) => {
+//   const token = req.headers.authorization?.split(" ")[1];
 
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // { id, role }
-    next();
-  } catch (error) {
-    return res.status(401).json({ message: "Token invalid" });
-  }
-};
->>>>>>> 708d87618764c867cd80ab9372f2c008ae93bd88
+//   if (!token) {
+//     return res.status(401).json({ message: "No token, unauthorized" });
+//   }
+
+//   try {
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     req.user = decoded; // { id, role }
+//     next();
+//   } catch (error) {
+//     return res.status(401).json({ message: "Token invalid" });
+//   }
+// };
+
