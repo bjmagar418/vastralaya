@@ -58,10 +58,10 @@ const userSchema = new mongoose.Schema({
     province: String,
   },
   role: {
-    type: [String],
-    enum: ["Customer", "Merchant", "Admin",], 
-    default: ["Customer"],
-  },
+  type: String,
+  enum: ["user", "admin"], // ✅ add admin here
+  default: "user",
+},
   profileImageUrl: {
     type: String,
   },
