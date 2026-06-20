@@ -1,64 +1,56 @@
-
-
 import express from "express";
-import fs from "fs";
 import dotenv from "dotenv";
 import cors from "cors";
-import connectDB from "./config/db.js";
-import authRoutes from "./routes/authRoutes.js";
-import userRoute from "../server/routes/userRoute.js";
-import productsRoute from "./routes/productRoute.js"; // Kept this one, removed the duplicate path
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
+
+import connectDB from "./config/db.js";
 import config from "./config/config.js";
+
+import authRoutes from "./routes/authRoutes.js";
+import userRoute from "./routes/userRoute.js";
+import productsRoute from "./routes/productRoute.js";
+import reviewRoute from "./routes/reviewRoute.js";
+
 import logger from "./middleware/logger.js";
 import auth from "./middleware/auth.js";
-import  reviewRoute from "./routes/reviewRoute.js"
 
 dotenv.config();
-
-// Connect to Database
 connectDB();
 
 const app = express();
 
-// --- Middleware Configuration ---
+// CORS
 app.use(
   cors({
-    origin: "http://localhost:5173", // Your frontend URL
-    credentials: true, // Allowed alongside the explicit origin above
-  }),
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
 );
 
-// Body parsers
+// BODY PARSER (clean)
 app.use(express.json({ limit: "25mb" }));
-app.use(express.urlencoded({ limit: "25mb", extended: true })); // Fixed a small typo here ("limited" -> "limit")
-app.use(cookieParser());
-app.use(bodyParser.json()); // Optional, since express.json() already handles this
+app.use(express.urlencoded({ extended: true, limit: "25mb" }));
 
-// Logging
+// REMOVE bodyParser.json() ❌ (not needed)
+
+// Cookies
+app.use(cookieParser());
+
+// Logger
 app.use(logger);
 
-// --- Routes ---
-
-// Public Auth Routes
+// ROUTES
 app.use("/api/auth", authRoutes);
-
-// Protected User Routes (Requires Auth middleware)
 app.use("/api/users", auth, userRoute);
-
-// Product Routes
 app.use("/api/products", productsRoute);
-
 app.use("/api/review", reviewRoute);
 
-
-// Base Test Route
+// TEST
 app.get("/", (req, res) => {
   res.send("Vastralaya Server is Running!");
 });
 
-// --- Server Initialization ---
 const PORT = config.port || 5005;
 
 app.listen(PORT, () => {
