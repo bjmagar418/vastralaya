@@ -1,4 +1,3 @@
-
 import { createSlice } from "@reduxjs/toolkit";
 import { getBaseUrl } from "../../../utils/baseURL";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
@@ -33,10 +32,13 @@ const productsApi = createApi({
           limit: limit.toString(),
         };
 
-        if (name) paramsObj.name = name; // 👈 3. Dynamically inject it into the search query object
+        if (name) paramsObj.name = name; //  3. Dynamically inject it into the search query object
 
         const queryParams = new URLSearchParams(paramsObj).toString();
-        return `/?${queryParams}`;
+
+        // Avoid returning `/?...` (leading slash + optional empty params)
+        // which was causing RTK Query to treat the request as errored in some cases.
+        return `?${queryParams}`;
       },
       providedTags: ["Products"],
     }),
