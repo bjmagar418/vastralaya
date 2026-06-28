@@ -11,6 +11,7 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoute from "./routes/userRoute.js";
 import productsRoute from "./routes/productRoute.js";
 import reviewRoute from "./routes/reviewRoute.js";
+import orderRoutes from "./routes/orderRoutes.js";
 
 import logger from "./middleware/logger.js";
 import auth from "./middleware/auth.js";
@@ -45,6 +46,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", auth, userRoute);
 app.use("/api/products", productsRoute);
 app.use("/api/review", reviewRoute);
+app.use("/api/orders", orderRoutes);
 
 // TEST
 app.get("/", (req, res) => {
