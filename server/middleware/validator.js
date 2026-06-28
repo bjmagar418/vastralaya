@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import z from "zod";
 
 // const validate = (schema) => (req, res, next) => {
@@ -41,12 +42,16 @@
 // export default validate;
 
 import { z } from "zod";
+=======
+import { ZodError } from "zod";
+>>>>>>> 622f74401f3f7abab73f1ddce8bbc6f41144d882
 
 const validate = (schema) => (req, res, next) => {
   try {
     schema.parse(req.body);
     next();
   } catch (error) {
+<<<<<<< HEAD
     // Check safely if it's an instance of a Zod error
     if (error instanceof z.ZodError) {
       // Use error.issues as it's the standard array for Zod validation items
@@ -56,13 +61,29 @@ const validate = (schema) => (req, res, next) => {
         success: false,
         errors: targetErrors.map((err) => ({
           field: Array.isArray(err.path) ? err.path.join(".") : "field",
+=======
+    console.log("VALIDATION ERROR:", error);
+
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        success: false,
+        errors: error.issues.map((err) => ({
+          field: err.path.join("."),
+>>>>>>> 622f74401f3f7abab73f1ddce8bbc6f41144d882
           message: err.message,
         })),
       });
     }
 
+<<<<<<< HEAD
     console.error("Validation Middleware Error:", error);
     return res.status(500).json({ message: "Internal server error" });
+=======
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+>>>>>>> 622f74401f3f7abab73f1ddce8bbc6f41144d882
   }
 };
 

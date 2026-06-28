@@ -4,14 +4,17 @@ import { loginSchema, registerSchema,forgotPasswordSchema,resetPasswordSchema } 
 import validate from "../middleware/validator.js";
 
 const router = express.Router();
-//register endpoint
-router.post("/register", validate(registerSchema), authController.registerUser);
-//router.post("/login", loginUser);
 
+// REGISTER
+router.post("/register", validate(registerSchema), authController.registerUser);
+
+// LOGIN
 router.post("/login", validate(loginSchema), authController.loginUser);
 
+// LOGOUT
 router.post("/logout", authController.logout);
 
+<<<<<<< HEAD
 
 router.post(
   "/forgot-password",
@@ -27,3 +30,6 @@ router.post(
 
 
 export default router;
+=======
+export default router;
+>>>>>>> 622f74401f3f7abab73f1ddce8bbc6f41144d882

@@ -1,15 +1,25 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { create } from "axios";
 import { getBaseUrl } from "../../../utils/baseURL";
 
 const authApi = createApi({
   reducerPath: "authApi",
+
   baseQuery: fetchBaseQuery({
+<<<<<<< HEAD
     baseUrl: `${getBaseUrl()}/api/auth`,
     credentials: "include",
   }),
   tagTypes: ["User"],
+=======
+  baseUrl: "http://localhost:5005/api/auth",
+  credentials: "include",
+}),
+
+  tagTypes: ["User"],
+
+>>>>>>> 622f74401f3f7abab73f1ddce8bbc6f41144d882
   endpoints: (builder) => ({
+
     registerUser: builder.mutation({
       query: (newUser) => ({
         url: "/register",
@@ -17,6 +27,7 @@ const authApi = createApi({
         body: newUser,
       }),
     }),
+
     loginUser: builder.mutation({
       query: (credentials) => ({
         url: "/login",
@@ -24,20 +35,19 @@ const authApi = createApi({
         body: credentials,
       }),
     }),
+
     logoutUser: builder.mutation({
       query: () => ({
         url: "/logout",
         method: "POST",
       }),
     }),
+
     getUser: builder.query({
-      query: () => ({
-        url: "/users",
-        method: "GET",
-      }),
-      refetchOnMount: true,
-      invalidatesTags: ["User"],
+      query: () => "/users",
+      providesTags: ["User"],
     }),
+
     deleteUser: builder.mutation({
       query: (userId) => ({
         url: `/users/${userId}`,
@@ -45,23 +55,32 @@ const authApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+
     updateUserRole: builder.mutation({
-      query: (userId, role) => ({
+      query: ({ userId, role }) => ({
         url: `/users/${userId}`,
         method: "PUT",
         body: { role },
       }),
-      refetchOnMount: true,
       invalidatesTags: ["User"],
     }),
+
     editProfile: builder.mutation({
+<<<<<<< HEAD
       query: (profilePayload) => ({
         url: "../users/edit-profile",
         method: "PATCH",
         body: profilePayload, // This sends the entire object including the userId
+=======
+      query: ({ userId, profileData }) => ({
+        url: `/users/${userId}`,
+        method: "PUT",
+        body: profileData,
+>>>>>>> 622f74401f3f7abab73f1ddce8bbc6f41144d882
       }),
       invalidatesTags: ["User"],
     }),
+
   }),
 });
 
@@ -74,4 +93,5 @@ export const {
   useUpdateUserRoleMutation,
   useEditProfileMutation,
 } = authApi;
+
 export default authApi;

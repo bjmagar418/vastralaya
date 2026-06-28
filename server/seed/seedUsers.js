@@ -1,57 +1,45 @@
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import bcrypt from "bcryptjs";
+import User from "../models/User.js";
 
-// // import User from "../models/User.js";
-// // import bcrypt from "bcryptjs";
+dotenv.config();
 
-// // const seedUsers = async () => {
-// //   try {
-// //     const adminExists = await User.findOne({ email: "admin@vastralaya.com" });
+const seedUsers = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("🟡 MongoDB Connected");
 
-// //     if (adminExists) {
-// //       console.log("Admin already exists");
-// //       return;
-// //     }
+    const adminExists = await User.findOne({
+      email: "admin@vastralaya.com",
+    });
 
-// //     // const hashedPassword = await bcrypt.hash("admin123", 10);
+    if (adminExists) {
+      console.log("⚠️ Admin already exists");
+      process.exit();
+    }
 
-// //     await User.create({
-// //       name: "Admin",
-// //       email: "admin@vastralaya.com",
-// //       password: "admin123",
-// //       role: "admin",
-// //     });
+    const hashedPassword = await bcrypt.hash("admin123", 10);
 
-// //     console.log("Admin seeded successfully");
-// //   } catch (error) {
-// //     console.log("Seed error:", error.message);
-// //   }
-// // };
+    await User.create({
+      name: "Admin",
+      email: "admin@vastralaya.com",
+      password: hashedPassword,
+      role: "admin",
 
-// // export default seedUsers;
-// import User from "../models/User.js";
-// import bcrypt from "bcryptjs";
+      // ✅ REQUIRED FIELDS ADDED
+      phone: "9800000000",
+      address: {
+        city: "Kathmandu",
+      },
+    });
 
-// const seedUsers = async () => {
-//   try {
-//     const adminExists = await User.findOne({ email: "admin@vastralaya.com" });
+    console.log("✅ Admin seeded successfully");
+    process.exit();
+  } catch (error) {
+    console.log("❌ Seed error:", error.message);
+    process.exit(1);
+  }
+};
 
-//     if (adminExists) {
-//       console.log("Admin already exists");
-//       return;
-//     }
-
-//     // const hashedPassword = await bcrypt.hash("admin123", 10);
-
-//     await User.create({
-//       name: "Admin",
-//       email: "admin@vastralaya.com",
-//       password: "admin123",
-//       role: "admin",
-//     });
-
-//     console.log("Admin seeded successfully");
-//   } catch (error) {
-//     console.log("Seed error:", error.message);
-//   }
-// };
-
-// export default seedUsers;
+seedUsers();
