@@ -5,21 +5,13 @@ const authApi = createApi({
   reducerPath: "authApi",
 
   baseQuery: fetchBaseQuery({
-<<<<<<< HEAD
     baseUrl: `${getBaseUrl()}/api/auth`,
     credentials: "include",
   }),
-  tagTypes: ["User"],
-=======
-  baseUrl: "http://localhost:5005/api/auth",
-  credentials: "include",
-}),
 
   tagTypes: ["User"],
 
->>>>>>> 622f74401f3f7abab73f1ddce8bbc6f41144d882
   endpoints: (builder) => ({
-
     registerUser: builder.mutation({
       query: (newUser) => ({
         url: "/register",
@@ -66,21 +58,13 @@ const authApi = createApi({
     }),
 
     editProfile: builder.mutation({
-<<<<<<< HEAD
-      query: (profilePayload) => ({
-        url: "../users/edit-profile",
-        method: "PATCH",
-        body: profilePayload, // This sends the entire object including the userId
-=======
       query: ({ userId, profileData }) => ({
         url: `/users/${userId}`,
         method: "PUT",
         body: profileData,
->>>>>>> 622f74401f3f7abab73f1ddce8bbc6f41144d882
       }),
       invalidatesTags: ["User"],
     }),
-
   }),
 });
 
