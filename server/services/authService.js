@@ -79,8 +79,6 @@ const registerUser = async (data) => {
     };
   }
 };
-
-<<<<<<< HEAD
 const forgotPassword = async (email) => {
   const user = await User.findOne({ email });
 
@@ -169,7 +167,7 @@ const resetPassword = async (input) => {
 
 
 export default {registerUser, loginUser,logout,forgotPassword,resetPassword};
-=======
+
 const loginUser = async ({ email, phone, password }) => {
   try {
     if (!password) {
@@ -247,4 +245,4 @@ export default {
   loginUser,
   logout,
 };
->>>>>>> 622f74401f3f7abab73f1ddce8bbc6f41144d882
+
