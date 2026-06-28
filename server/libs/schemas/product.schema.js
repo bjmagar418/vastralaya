@@ -12,17 +12,18 @@ export const productSchema = z.object({
   category: z.string({ required_error: "Product category is required" }),
 
   price: z
-    .number({ required_error: "Price is required" })
+    .string({ required_error: "Price is required" })
     .min(1, { message: "Price must be greater than 1" })
     .max(99999, { message: "Price must be less than 99999" }),
 
-  stock: z.number().min(0, { message: "Stock cannot be negative" }).default(1),
-  description:z.string(),
+  stock: z.string().min(0, { message: "Stock cannot be negative" }).default(1),
+  description:z.string().optional(),
   createdAt: z.date().default(() => new Date()),
 
   createdBy: z
     .string({ required_error: "Created by userid is required" })
-    .regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid MongoDB ObjectId format" }),
+    .regex(/^[0-9a-fA-F]{24}$/, { message: "Invalid MongoDB ObjectId format" })
+    .optional(),
 
   imageUrl: z.string().url().optional(),
 });

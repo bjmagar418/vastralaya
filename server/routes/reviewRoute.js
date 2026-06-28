@@ -6,4 +6,9 @@ const router = express.Router();
 // post a new review
 router.post("/post-review",reviewController.createReview);
 
-export default express;
+router.get("/total-reviews",reviewController.getTotalReviews);
+
+//get reviews by userid
+router.get("/:userId",reviewController.getReviewsByUserId);
+
+export default router;

@@ -42,12 +42,16 @@ const Login = () => {
       // Update local Redux storage state (Passing token along is recommended if your slice needs it)
       dispatch(setUser({ user, token }));
 
+      const userRole = user?.role || user?.user?.role;
       // Role-based routing system navigation redirect paths
-      if (user?.role === "admin" || user?.user?.role === "admin") {
-        navigate("/admin/dashboard");
-      } else {
-        navigate("/user/dashboard");
-      }
+  
+      if (userRole === "admin") {
+  navigate("/dashboard/admin");
+} else if (userRole === "merchant") {
+  navigate("/dashboard/merchant");
+} else {
+  navigate("/dashboard");
+}
     } catch (err) {
       setError(err?.data?.message || err?.message || "Invalid credentials");
     }

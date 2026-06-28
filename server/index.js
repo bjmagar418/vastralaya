@@ -14,13 +14,21 @@ import config from "./config/config.js";
 import logger from "./middleware/logger.js";
 import auth from "./middleware/auth.js";
 import  reviewRoute from "./routes/reviewRoute.js"
+import multer from "multer";
+import connectCloudinary from "./config/cloudinary.js";
+import orderRoute from "./routes/orderRoute.js";
+import statsRoute from "./routes/statsRoute.js";
+
+
 
 dotenv.config();
 
-// Connect to Database
-connectDB();
 
 const app = express();
+
+// Connect to Database
+connectDB();
+connectCloudinary();
 
 // --- Middleware Configuration ---
 app.use(
@@ -50,7 +58,11 @@ app.use("/api/users", auth, userRoute);
 // Product Routes
 app.use("/api/products", productsRoute);
 
-app.use("/api/review", reviewRoute);
+app.use("/api/reviews", reviewRoute);
+app.use("/api/orders",auth, orderRoute);
+app.use("/api/stats", statsRoute);
+
+
 
 
 // Base Test Route

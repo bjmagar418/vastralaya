@@ -36,40 +36,75 @@ const Navbar = () => {
     }
   };
 
+  // const handleLogout = async () => {
+  //   try {
+  //     await logoutUser().unwrap();
+  //     dispatch(logout());
+  //     setIsDropDownOpen(false);
+  //     navigate("/");
+  //   } catch (error) {
+  //     console.error("Failed to logout:", error);
+  //   }
+  // };
+
   const handleLogout = async () => {
     try {
+      // 1. Trigger backend logout routine
       await logoutUser().unwrap();
+    } catch (error) {
+      console.error("Backend logout cleanup error:", error);
+    } finally {
+      // 2. ALWAYS clear local state even if the server is taking too long to reply
       dispatch(logout());
       setIsDropDownOpen(false);
       navigate("/");
-    } catch (error) {
-      console.error("Failed to logout:", error);
     }
   };
 
   const adminDropDownMenus = [
-    { label: "Dashboard", path: "/admin/dashboard" },
-    { label: "Manage Items", path: "/admin/manage-items" },
-    { label: "All Orders", path: "/admin/manage-orders" },
-    { label: "Add New Post", path: "/admin/add-product" },
+    { label: "Dashboard", path: "/dashboard/admin"},
+    { label: "Manage Product", path: "/dashboard/admin/manage-product" },
+    { label: "All Orders", path:"/dashboard/admin/manage-orders"},
+    { label: "Add New Product", path: "/dashboard/admin/add-product" },
   ];
+  
+  const merchantDropDownMenus = [
+       { label: "Dashboard", path: "/dashboard/merchant"},
+    { label: "Manage Product", path: "/dashboard/merchant/manage-product" },
+    { label: "All Orders", path:"/dashboard/merchant/manage-orders"},
+    { label: "Add New Post", path: "/dashboard/merchant/add-new-post" },
+  ]
 
   const userDropDownMenus = [
-    { label: "Dashboard", path: "/user/dashboard" },
-    { label: "Profile", path: "/user/profile" },
-    { label: "Payments", path: "/user/payments" },
-    { label: "Orders", path: "/user/orders" },
+    { label: "Dashboard", path: "/dashboard" },
+    { label: "Orders", path: "/dashboard/orders" },
+    { label: "Profile", path: "/dashboard/profile" },
+    { label: "Payments", path: "/dashboard/payments" },
   ];
 
-  const dropdownMenus =
-    user?.role === "admin" ? adminDropDownMenus : userDropDownMenus;
+  // const dropdownMenus =
+  //   user?.role === "admin" ? adminDropDownMenus : userDropDownMenus;
+// Dynamically check the profile payload data 
+const rawRole = user?.role || user?.user?.role;
+const currentRole = Array.isArray(rawRole) 
+    ? rawRole[0]?.toLowerCase() 
+    : rawRole?.toLowerCase();
 
-  return (
+const menuMapping = {
+  admin: adminDropDownMenus,
+  merchant: merchantDropDownMenus,
+  customer: userDropDownMenus, // Matches "Customer" role
+  user: userDropDownMenus,
+};
+
+// Dynamically grab the menu based on the role, defaulting to userDropDownMenus
+const dropdownMenus = menuMapping[currentRole] || userDropDownMenus;
+
+return (
     <>
       {/* Sticky top wrapper with controlled layout bounds */}
       <nav className="sticky top-0 z-50 bg-white shadow-md px-4 sm:px-6 lg:px-8 py-4 lg:py-5">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4 pr-6 md:pr-12 xl:pr-16">
-          
           {/* LOGO SECTION - Added right margin to separate brand text from Home links */}
           <div className="flex items-center gap-4 mr-6 md:mr-12 xl:mr-20">
             <img
@@ -188,7 +223,7 @@ const Navbar = () => {
                           {user?.name || "My Account"}
                         </p>
                       </div>
-                      <ul className="py-1 pr-10">
+                      <ul className="py-1 w-full">
                         {dropdownMenus.map((menu, index) => (
                           <li key={index}>
                             <Link
@@ -298,7 +333,7 @@ const Navbar = () => {
             </ul>
 
             {/* Mobile Auth Actions Block */}
-            <div className="flex gap-3 mt-1 pt-4 border-t border-zinc-900/10">
+            <div className="block lg:hidden flex gap-3 mt-1 pt-4 border-t border-zinc-900/10">
               {user ? (
                 <div className="flex items-center gap-3 w-full bg-white/10 p-3 rounded-xl border border-white/10">
                   <img

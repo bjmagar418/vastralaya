@@ -10,6 +10,21 @@ import { userSchema } from "../schemas/user.schema.js";
  * password: required,min length 6,password format
  */
 
+
+
+export const registerSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  phone: z.string(),
+  address: z.object({
+    city: z.string().min(1, "City is required"),
+  }),
+  // FIX: Make them optional or give them a default value so validation passes
+  isActive: z.boolean().optional().default(true),
+  role: z.array(z.string()).optional().default(["Customer"]),
+});
+
 export const loginSchema = z
   .object({
     email: z
@@ -31,7 +46,6 @@ export const loginSchema = z
 
 
 
-export const registerSchema = userSchema;
 
 
 export const forgotPasswordSchema = z.object({

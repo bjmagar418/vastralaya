@@ -62,6 +62,8 @@ const userSchema = new mongoose.Schema({
     enum: ["Customer", "Merchant", "Admin",], 
     default: ["Customer"],
   },
+  bio:{type:String},
+  profession:{type:String},
   profileImageUrl: {
     type: String,
   },

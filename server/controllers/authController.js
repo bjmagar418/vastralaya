@@ -4,29 +4,6 @@ import  jwt from "../utils/jwt.js";
 const registerUser = async(req, res) => {
        const input = req.body;
    try{
-    //  if (!input) {
-    //    throw {
-    //      message: "Invalid data",
-    //    };
-    //  }
-
-    //  if (!input.email && !input.phone) {
-    //    throw {
-    //      message: "Email/phone number is required",
-    //    };
-    //  }
-
-    //  if (!input.name) {
-    //    throw {
-    //      message: "name is required",
-    //    };
-    //  }
-
-    //  if (!input.password) {
-    //    throw {
-    //      message: "Password is required",
-    //    };
-    //  }
      const createdUser = await authService.registerUser(input);
     
      
@@ -35,6 +12,9 @@ const registerUser = async(req, res) => {
      ///res.cookie("key",value,expireTime);
      res.cookie("authToken", token, {
        maxAge: 3600 * 1000, //1 hour
+       httpOnly: true,
+       secure: process.env.NODE_ENV === "production",
+       sameSite: "strict",
      });
     
      return res
@@ -78,7 +58,10 @@ const loginUser = async(req, res) => {
      
   ///res.cookie("key",value,expireTime);
 res.cookie("authToken", token, {
-  maxAge:3600 * 1000,  //1 hour
+  maxAge: 3600 * 1000,
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict",
 });
 
      return res
@@ -101,10 +84,11 @@ const logout = async (req, res) => {
     await authService.logout(token);
 
     res.clearCookie("authToken", {
-      maxAge: 3600 * 1000,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
+       maxAge: 3600 * 1000,
+
     });
 
     res.status(200).json({ message: "Logout successfully" });
@@ -113,5 +97,31 @@ const logout = async (req, res) => {
   }
 };
 
+const forgotPassword = async (req, res) => {
+  const input = req.body;
 
-export default {registerUser,loginUser,logout};
+  try {
+    const data = await authService.forgotPassword(input?.email);
+
+    res.json(data);
+  } catch (error) {
+    res.status(error.status || 400).send(error.message);
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const input = req.body;
+
+  try {
+    const data = await authService.resetPassword(input);
+
+    res.json(data);
+  } catch (error) {
+    res.status(error.status || 400).send(error.message);
+  }
+};
+
+
+
+
+export default {registerUser,loginUser,logout,forgotPassword,resetPassword};

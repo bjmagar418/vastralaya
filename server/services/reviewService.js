@@ -32,4 +32,15 @@ const createReview = async ({ comment, rating, productId, userId }) => {
     return {reviews};
 
 };
- export default {createReview}
+
+
+const getTotalReviews = async() =>{
+    const totalReviews = await Reviews.countDocuments({});
+    return totalReviews;
+}
+
+const getReviewsByUserId = async(userId) =>{
+const reviews = await Reviews.find({userId:userId}).sort({createdAt:-1});
+return reviews;
+}
+ export default { createReview, getTotalReviews, getReviewsByUserId };

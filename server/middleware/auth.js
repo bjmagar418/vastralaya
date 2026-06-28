@@ -1,22 +1,28 @@
 import jwt from "../utils/jwt.js";
 
-const auth = (req,res,next) =>{
-   const cookie = req.headers.cookie;
-   if (!cookie) return res.status(401).send("User not authenticated");
+const auth = (req, res, next) => {
+  // DEBUGGING: This log will tell us if cookie-parser is working
+  console.log("Cookies received by server:", req.cookies);
 
-  const token = cookie.split("=")[1];
- // console.log(token);
- if(!token) {
-   return res.status(401).send("User not authenticated");
- }
+  // The '?. ' is the "defensive" part. If req.cookies is undefined,
+  // it won't crash the server.
+  const token = req.cookies?.authToken;
 
- try{
-const data = jwt.verifyToken(token);
+  if (!token) {
+    console.log("No authToken found in cookies.");
+    return res
+      .status(401)
+      .json({ message: "User not authenticated - No token" });
+  }
 
-req.user = data; // Attach user data to the request object for later use
- } catch(error){
-   return res.status(401).send("User not authenticated");
- }
- next();
-}
+  try {
+    const data = jwt.verifyToken(token);
+    req.user = data;
+    next();
+  } catch (error) {
+    console.log("Token verification failed:", error.message);
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+};
+
 export default auth;

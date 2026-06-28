@@ -23,10 +23,15 @@ const getAllProducts = async (req, res) => {
 
 const createProduct = async (req,res) =>{
     const userId = req.user._id;
+    const files =await req.files;
+   /// console.log(files);
+   console.log("Body:", req.body);
+   console.log("Files:", req.files);
   
   try {
-          const product= await productService.createProduct(req.body,userId);
-    return res.status(201).json(product);
+          const product= await productService.createProduct(req.body,req.files,userId);
+   return res.status(201).json(product);
+    //res.json("file uploaded")
 
     } catch (error) {
             return res.status(500).json({ message: error.message });
@@ -37,14 +42,20 @@ const createProduct = async (req,res) =>{
 const getProductById = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("Fetching product with ID:", id); // ADD THIS
-    const product = await productService.getProductById(id);
-    if (!product) {
+    console.log("Fetching product with ID:", id);
+
+    // The service now returns the product object with the .reviews array nested right inside it
+    const productWithReviews = await productService.getProductById(id);
+
+    if (!productWithReviews) {
       return res.status(404).json({ message: "Product not found" });
     }
-    res.status(200).json(product);
+
+    // Send the complete dataset (Product + Reviews) back to your frontend
+    return res.status(200).json(productWithReviews);
   } catch (error) {
-    res.status(500).json({ message: "Failed to fetch product" });
+    console.error("Error fetching product inside controller:", error);
+    return res.status(500).json({ message: "Failed to fetch product" });
   }
 };
 
@@ -76,7 +87,7 @@ const updateProduct = async(req,res) =>{
   const id = req.params.id;
   const input = req.body;
   try{
-const product = await productService.updateProduct(id,input);
+const product = await productService.updateProduct(id,input,req.files);
 return res.status(200).json(product);
   }catch(error) {
         res.status(500).json({ message: error.message });

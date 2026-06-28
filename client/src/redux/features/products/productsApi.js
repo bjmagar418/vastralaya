@@ -13,7 +13,7 @@ const productsApi = createApi({
   endpoints: (builder) => ({
     fetchAllProducts: builder.query({
       query: ({
-        name, // 👈 1. Accept the incoming search text
+        name, // 1. Accept the incoming search text
         category,
         color,
         brands,
@@ -53,11 +53,11 @@ const productsApi = createApi({
 
     addProduct: builder.mutation({
       // Lowercased 'addProduct' to match standard naming conventions
-      query: (newProduct) => ({
+      query: (formData) => ({
         url: "/",
         method: "POST",
-        body: newProduct,
-        credentials: "include",
+        body: formData,
+        //credentials: "include",
       }),
       invalidatesTags: ["Products"],
     }),

@@ -8,7 +8,7 @@ const authApi = createApi({
     baseUrl: `${getBaseUrl()}/api/auth`,
     credentials: "include",
   }),
-  tagTypes:["User"],
+  tagTypes: ["User"],
   endpoints: (builder) => ({
     registerUser: builder.mutation({
       query: (newUser) => ({
@@ -28,7 +28,6 @@ const authApi = createApi({
       query: () => ({
         url: "/logout",
         method: "POST",
-        
       }),
     }),
     getUser: builder.query({
@@ -56,11 +55,12 @@ const authApi = createApi({
       invalidatesTags: ["User"],
     }),
     editProfile: builder.mutation({
-      query: (profileData) => ({
-        url: `/users/${userId}`,
-        method: "PUT",
-        body: profileData,
+      query: (profilePayload) => ({
+        url: "../users/edit-profile",
+        method: "PATCH",
+        body: profilePayload, // This sends the entire object including the userId
       }),
+      invalidatesTags: ["User"],
     }),
   }),
 });

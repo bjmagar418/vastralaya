@@ -1,17 +1,67 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearCart } from '../../../redux/features/cart/cartSlice';
-
+import { loadStripe } from "@stripe/stripe-js";
+import { getBaseUrl } from '../../../utils/baseURL';
 
 const OrderSummary = () => {
+    const dispatch = useDispatch();
+   const { user} = useSelector(state => state.auth);
   
-  const products = useSelector((store) => store.cart.products);
-  const {selectedItems,tax,taxRate,totalPrice,grandTotal, DELIVERY_FEE} = useSelector((store) => store.cart);
-  const dispatch = useDispatch();
+    const products = useSelector((store) => store.cart.products);
+
+    const {selectedItems,tax,taxRate,totalPrice,grandTotal, DELIVERY_FEE} = useSelector((store) => store.cart);
   
   const handleClearCart= () =>{
     dispatch(clearCart());
   }
+
+  // payment integration
+
+const makePayment = async (e) => {
+  const body = {
+    products: products,
+    userId: user?.id
+  };
+  
+  const headers = {
+    "Content-Type": "application/json"
+  };
+
+  try {
+    const response = await fetch(`${getBaseUrl()}/api/orders/create-checkout-session`, {
+      method: "POST",
+      headers: headers,
+      credentials: "include",
+      body: JSON.stringify(body)
+    });
+
+    console.log(response);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Server Error (${response.status}):`, errorText);
+      alert(`Authentication Error: ${errorText || "Please log in again."}`);
+      return;
+    }
+
+    const session = await response.json();
+    console.log("session", session);
+
+    // FIX: Redirect using the URL returned from Stripe via your backend
+    if (session.url) {
+      window.location.href = session.url;
+    } else {
+      console.error("No redirect URL found in the session response.");
+      alert("Failed to initiate payment redirection.");
+    }
+
+  } catch (error) {
+    console.error("Payment error:", error);
+    alert("An error occurred while processing your payment.");
+  }
+};
+
   return (
       <div className="w-full max-w-sm mx-auto lg:mx-0 lg:w-72 bg-white rounded-xl border border-gray-200 p-5 lg:sticky lg:top-24">
               <h2 className="text-base font-semibold text-gray-800 mb-4">Order Summary</h2>
@@ -45,8 +95,12 @@ className="mt-5 w-full bg-gray-900 cursor-pointer text-white text-sm font-medium
                
                 Clear Checkout
               </button>
-              <button className="mt-5 w-full bg-gray-900 text-white text-sm font-medium py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-700 transition">
-               
+              <button
+              onClick={(e) =>{
+                e.stopPropagation();
+                makePayment();
+              }}
+              className="mt-5 w-full bg-gray-900 text-white text-sm font-medium py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-700 transition"> 
                 Proceed to Checkout
               </button>
 

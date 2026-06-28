@@ -1,6 +1,9 @@
 import { Query } from "mongoose";
 import Product from "../models/products.js";
 import Reviews from "../models/reviews.js";
+import uploadFile from "../utils/fileuploader.js";
+
+
 const getAllProducts = async (query) => {
   const { name, category, brands, page=1,limit=10, color, min, max, createdBy } = query;
  const filter = {};
@@ -52,11 +55,14 @@ const totalPages = Math.ceil(totalProducts / parseInt(limit));
 
 // };
 
-const createProduct = async (productData, userId) => {
-  
+const createProduct = async (productData,files, userId) => {
+      const uploadedFiles = await uploadFile(files);
+
+
   // 1. Create and save the new product with the creator's ID
   const savedProduct = await Product.create({
     ...productData,
+    imageUrl:uploadedFiles.map((file) =>file.url),
     createdBy: userId,
   });
 
@@ -82,9 +88,21 @@ const createProduct = async (productData, userId) => {
 
 
 const getProductById = async (id) => {
-  const product = await Product.findById(id);
 
-  return product;
+  // 1. Fetch the raw product document
+  const product = await Product.findById(id);
+  if (!product) {
+    return null; // Return null so the controller knows to trigger a 404
+  }
+
+  // 2. Fetch the product's reviews, populate reviewer names, and sort by latest
+  const reviews = await Reviews.find({ productId: id })
+    .populate("userId", "username email")
+    .sort({ createdAt: -1 });
+ return {
+   ...product.toObject(), // Converts Mongoose Document into a plain JS object
+   reviews: reviews, // Attaches the array your frontend expects
+ };
 };
 
 const getAllCategories = async () => {
@@ -120,8 +138,15 @@ const getProductsByCategory = async (category) => {
   });
 };
 
-const updateProduct = async (id, input) => {
-  return await Product.findByIdAndUpdate(id, input, { new: true });
+const updateProduct = async (id, input,files) => {
+  const updateData = input;
+  if(files && files.length>0){
+  const uploadedFiles = await uploadFile(files);
+  updateData.imageUrl = uploadedFiles.map((file) =>file.url);
+  }
+  
+  return await Product.findByIdAndUpdate(id,updateData,
+   { new: true });
 };
 
 const deleteProduct = async (id) => {

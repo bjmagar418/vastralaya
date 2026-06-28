@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { useFetchProductsByIdQuery } from "../../../redux/features/products/productsApi";
 import { addToCart } from "../../../redux/features/cart/cartSlice";
 import { addToWish } from "../../../redux/features/wish/wishSlice"; // 👈 Ensure this file path and slice name match your project
+import ReviewsCard from "./reviews/ReviewsCard";
 
 const SingleProduct = () => {
   const { id } = useParams();
@@ -17,6 +18,7 @@ const SingleProduct = () => {
 
   // 2. Maps directly to your backend response object
   const singleProduct = data || {}; 
+  const productReviews = data?.reviews || [];
 
   // Local Review/Modal States
   const [showModal, setShowModal] = useState(false);
@@ -152,9 +154,19 @@ const SingleProduct = () => {
               Add To Wishlist
             </button>
           </div>
+
+
         </div>
       </div>
+
+      
+          {/* displays review */}
+    <div className=" max-w-2xl m-auto px-9 py-2 mt-7">
+    <ReviewsCard productReviews={productReviews}/>
     </div>
+    </div>
+    
+    
   );
 };
 
