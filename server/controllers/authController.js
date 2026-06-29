@@ -1,79 +1,6 @@
 import authService from "../services/authService.js";
 import jwt from "../utils/jwt.js";
 
-const registerUser = async(req, res) => {
-       const input = req.body;
-   try{
-     const createdUser = await authService.registerUser(input);
-    
-     
-     const token = jwt.createToken({ ...createdUser});
-
-     ///res.cookie("key",value,expireTime);
-     res.cookie("authToken", token, {
-       maxAge: 3600 * 1000, //1 hour
-       httpOnly: true,
-       secure: process.env.NODE_ENV === "production",
-       sameSite: "strict",
-     });
-    
-     return res
-       .status(201)
-       .json({
-         message: "User registered successfully",
-         ...createdUser,
-         token,
-       });
-   } catch(error){
-  return res.status(500).json({message:error.message || "Server error"})
-   }
-}
-
-const loginUser = async(req, res) => {
-       const input = req.body;
-          const { email, phone, password } = req.body;
-
-   try{
-     if (!input) {
-       throw {
-         message: "Invalid data",
-       };
-     }
-
-     if (!input.email && !input.phone) {
-       throw {
-         message: "Email/phone number is required",
-       };
-     }
-
-     if (!input.password) {
-       throw {
-         message: "Password is required",
-       };
-     }
-
-     const loginUser = await authService.loginUser(input);
-
-     const token =  jwt.createToken({...loginUser});
-     
-  ///res.cookie("key",value,expireTime);
-res.cookie("authToken", token, {
-  maxAge: 3600 * 1000,
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "strict",
-});
-
-     return res
-       .status(201)
-       .json({ ...loginUser,token });
-     // res.json(loginUser);
-   } catch(error){
-  return res.status(error.status || 400).json({message:error.message || "Server error"})
-   }
-}
-
-const logout = async (req, res) => {
 const registerUser = async (req, res) => {
   try {
     const input = req.body;
@@ -86,7 +13,6 @@ const registerUser = async (req, res) => {
       role: createdUser.role,
     });
 
-    res.clearCookie("authToken", {
     res.cookie("authToken", token, {
       maxAge: 3600 * 1000, // 1 hour
       httpOnly: true,
@@ -100,7 +26,6 @@ const registerUser = async (req, res) => {
       user: createdUser,
       token,
     });
-
   } catch (error) {
     return res.status(error.status || 500).json({
       success: false,
@@ -113,6 +38,20 @@ const loginUser = async (req, res) => {
   try {
     const input = req.body;
 
+    if (!input.email && !input.phone) {
+      return res.status(400).json({
+        success: false,
+        message: "Email or phone number is required",
+      });
+    }
+
+    if (!input.password) {
+      return res.status(400).json({
+        success: false,
+        message: "Password is required",
+      });
+    }
+
     const loginData = await authService.loginUser(input);
 
     const token = jwt.createToken({
@@ -122,12 +61,10 @@ const loginUser = async (req, res) => {
     });
 
     res.cookie("authToken", token, {
-      maxAge: 3600 * 1000,
+      maxAge: 3600 * 1000, // 1 hour
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-       maxAge: 3600 * 1000,
-
     });
 
     return res.status(200).json({
@@ -136,7 +73,6 @@ const loginUser = async (req, res) => {
       user: loginData,
       token,
     });
-
   } catch (error) {
     return res.status(error.status || 400).json({
       success: false,
@@ -145,34 +81,6 @@ const loginUser = async (req, res) => {
   }
 };
 
-const forgotPassword = async (req, res) => {
-  const input = req.body;
-
-  try {
-    const data = await authService.forgotPassword(input?.email);
-
-    res.json(data);
-  } catch (error) {
-    res.status(error.status || 400).send(error.message);
-  }
-};
-
-const resetPassword = async (req, res) => {
-  const input = req.body;
-
-  try {
-    const data = await authService.resetPassword(input);
-
-    res.json(data);
-  } catch (error) {
-    res.status(error.status || 400).send(error.message);
-  }
-};
-
-
-
-
-export default {registerUser,loginUser,logout,forgotPassword,resetPassword};
 const logout = async (req, res) => {
   try {
     const token = req.cookies?.authToken;
@@ -184,7 +92,8 @@ const logout = async (req, res) => {
       });
     }
 
-    await authService.logout(token);
+    // Uncomment if your service implements logout logic
+    // await authService.logout(token);
 
     res.clearCookie("authToken", {
       httpOnly: true,
@@ -196,7 +105,6 @@ const logout = async (req, res) => {
       success: true,
       message: "Logout successful",
     });
-
   } catch (error) {
     return res.status(500).json({
       success: false,
@@ -206,4 +114,38 @@ const logout = async (req, res) => {
   }
 };
 
-export default { registerUser, loginUser, logout };
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const data = await authService.forgotPassword(email);
+
+    return res.status(200).json(data);
+  } catch (error) {
+    return res.status(error.status || 400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const data = await authService.resetPassword(req.body);
+
+    return res.status(200).json(data);
+  } catch (error) {
+    return res.status(error.status || 400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export default {
+  registerUser,
+  loginUser,
+  logout,
+  forgotPassword,
+  resetPassword,
+};
